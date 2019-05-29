@@ -1,0 +1,15 @@
+<html>
+<h1>Update {{character.name}}:</h1>
+<form id="update-character" action="/characters" method="post">
+    Name: <input type="text" name="name" value="{{character.name}}"><br>
+    Homeworld: <select name="homeplanet" id="planet-selector"> 
+        {{#each planets}}
+        <option value="{{id}}">{{name}}</option>
+        {{/each}}
+    </select><br>
+    Alignment: <input type="radio" name="alignment" value="good">Good
+    <input type="radio" name="alignment" value="good">Evil<br>
+</form>
+<button onclick="updatePerson({{character.id}})">Update</button>
+<script defer>selectPlanet({{character.homeplanet}});</script>
+</html>

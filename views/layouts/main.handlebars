@@ -1,13 +1,21 @@
 <!doctype html>
 <html>
 <head>
-	<title>Demo Page</title>
+	<title>Marvel Database</title>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     {{#each jsscripts}}
     <script src="/static/{{this}}"></script>
     {{/each}}
 </head>
 <body>
+
+	<br><a href="/">Home</a> | 
+	<a href="characters.html">Characters</a> | 
+	<a href="planets.html">Planets</a> | 
+	<a href="characters_powers.html">Powers</a> | 
+	<a href="weapons.html">Weapons</a> | 
+	<a href="realms.html">Realms</a><br><br>
+
 	{{{body}}}
 </body>
 </html>

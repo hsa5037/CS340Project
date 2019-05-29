@@ -6,32 +6,50 @@
 	</head>
 
 	<body>
-		<h3>Marvel Characters</h3>
-		<br><a href="http://web.engr.oregonstate.edu/~moonha/">Home</a> | 
-		<a href="characters.html">Characters</a> | 
-		<a href="planets.html">Planets</a> | 
-		<a href="powers.html">Powers</a> | 
-		<a href="weapons.html">Weapons</a> | 
-		<a href="alignments.html">Alignments</a> | 
-		<a href="realms.html">Realms</a><br><br>
+		
+		<h3>Add new people:</h3>
+		<form id="addcharacter" action="/character" method="post">
+		    Name: <input type="text" name="name"><br>
+		    Home planet: <select name="homeworld"> 
+		        {{#each planets}}
+		        <option value="{{id}}">{{name}}</option>
+		        {{/each}}
+		    </select><br>
+		    Alignment: <input type="radio" name="alignment" value="good">Good
+		    <input type="radio" name="alignment" value="good">Evil<br>
+		    <input type="submit" value="Submit">
+		 </form>
+		<br/>
 
-		<h7>Filter by:</h7>
-		<form>
-			Power: 
-			<select name="power_filter">
-				<option></option>
-			</select><br>
-			Alignment: 
-			<select name="alignment_filter">
-				<option></option>
-			</select><br>
-			Planet: 
-			<select name="planet_filter">
-				<option></option>
-			</select><br><br>
+
+		<!-- vv WORK IN PROGRESS vv -->
+
+		<form id='filter_characters' action='' method=''>
+		<!--- this form does not submit directly, the button handles all the interaction with backend -->
+		    <label> Filter by home planet: </label>
+		    <select id='homeplanet_filter' name="homeplanet"> 
+		        {{#each planets}}
+		        <option value="{{id}}">{{name}}</option>
+		        {{/each}}
+		    </select><br>
+		    <input type="button" value="Filter" onclick="filterCharactersByPlanet()"><br><br>
+
+		    <label> Filter by alignment: </label>
+		    <input type="radio" name="alignment" value="good">Good
+		    <input type="radio" name="alignment" value="good">Evil<br>
+		    <input type="button" value="Filter" onclick="filterCharactersByAlignment()">
+		</form><br>
+
+		<form id='search_people' action='' method=''>
+		<!--- this form does not submit directly, the button handles all the interaction with backend -->
+		    <label> Search people for name starting with:</label>
+		    <input id='name_search_string' type='text' name='name_search_string' value=''>
+		    <input type="button" value="Search" onclick="searchCharactersByFirstName()">
 		</form>
 
-	
+		<!-- ^^ WORK IN PROGRESS ^^ -->
+
+		<h2>Current character list:</h2>
 		<table>
 			<thead>
 				<th>Name</th>
@@ -54,20 +72,5 @@
 				{{/each}}
 			</tbody>
 		</table>
-		
-		
-
-
-		<h7>Add New Character</h7>
-		<form>
-			Name: <input type="text" name="name"><br>
-			Home Planet: <input type="text" name="homeplanet"><br>
-			Alignment: <input type="text" name="alignment"><br>
-			Power: 
-			<select name="power_select">
-				<option></option>
-			</select><br>
-			<input type="submit" value="Submit">
-		</form>
 	</body>
 </html>
