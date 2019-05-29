@@ -3,12 +3,12 @@ module.exports = function(){
     var router = express.Router();
 
     function getChars(res, mysql, context, complete){
-    	mysql.pool.query("SELECT * FROM characters;", function(error, results, fields){
+    	mysql.pool.query("SELECT C.name, H.name, P.name, A.alignment FROM characters C INNER JOIN characters_powers CP ON CP.cid = C.id INNER JOIN powers P ON P.id = CP.pid INNER JOIN planets H ON H.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment ORDER BY C.name ASC;", function(error, results, fields){
     		if(error){
     			res.write(JSON.stringify(error));
     			res.end();
     		}
-    		context.character = results;
+    		context.characters = results;
     		complete();
     	});
     }
