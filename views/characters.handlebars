@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Marvel Characters</title>
+	</head>
+
+	<body>
+		<h3>Marvel Characters</h3>
+		<br><a href="http://web.engr.oregonstate.edu/~moonha/">Home</a> | 
+		<a href="characters.html">Characters</a> | 
+		<a href="planets.html">Planets</a> | 
+		<a href="powers.html">Powers</a> | 
+		<a href="weapons.html">Weapons</a> | 
+		<a href="alignments.html">Alignments</a> | 
+		<a href="realms.html">Realms</a><br><br>
+
+		<h7>Filter by:</h7>
+		<form>
+			Power: 
+			<select name="power_filter">
+				<option></option>
+			</select><br>
+			Alignment: 
+			<select name="alignment_filter">
+				<option></option>
+			</select><br>
+			Planet: 
+			<select name="planet_filter">
+				<option></option>
+			</select><br><br>
+		</form>
+
+	
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Home Planet</th>
+				<th>Weapons</th>
+				<th>Moral Alignment</th>
+				<th>Powers</th>
+			</thead>
+			<tbody>
+				{{#each character}}
+				<tr>
+					<td>{{name}}</td>
+					<td>{{homeplanet}}</td>
+					<td>{{weapons}}</td>
+					<td>{{alignment}}</td>
+					<td>{{powers}}</td>
+					<td><button onclick="deletePerson({{id}})">Delete</button></td>
+					<td><a href="/character/{{id}}">Update</a></td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+		
+		
+
+
+		<h7>Add New Character</h7>
+		<form>
+			Name: <input type="text" name="name"><br>
+			Home Planet: <input type="text" name="homeplanet"><br>
+			Alignment: <input type="text" name="alignment"><br>
+			Power: 
+			<select name="power_select">
+				<option></option>
+			</select><br>
+			<input type="submit" value="Submit">
+		</form>
+	</body>
+</html>

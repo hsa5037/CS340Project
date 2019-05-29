@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Marvel Weapons</title>
+	</head>
+
+	<body>
+		<h3>Marvel Weapons</h3>
+
+		<br><a href="http://web.engr.oregonstate.edu/~moonha/">Home</a> | 
+		<a href="/characters">Characters</a> | 
+		<a href="/planets">Planets</a> | 
+		<a href="/powers">Powers</a> | 
+		<a href="/weapons">Weapons</a> | 
+		<a href="/alignments">Alignments</a> | 
+		<a href="/realms">Realms</a><br><br>
+
+
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Wielder</th>
+			</thead>
+			<tbody>
+				{{#each weapon}}
+				<tr>
+					<td>{{name}}</td>
+					<td>{{description}}</td>
+					<td>{{wielder}}</td>
+					<td><button onclick="deletePerson({{id}})">Delete</button></td>
+					<td><a href="/weapon/{{id}}">Update</a></td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+
+
+		<h7>Add New Weapon</h7>
+		<form>
+			Name:<input type="text" name="name"><br>
+			Description:<input type="text" name="desciption"><br>
+			Wielder<input type="text" name="wielder"><br>
+			<input type="submit" value="Submit">
+		</form>
+	</body>
+</html>

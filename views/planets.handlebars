@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Marvel Planets</title>
+	</head>
+
+	<body>
+		<h3>Marvel Planets</h3>
+
+		<br><a href="http://web.engr.oregonstate.edu/~moonha/">Home</a> | 
+		<a href="/characters">Characters</a> | 
+		<a href="/planets">Planets</a> | 
+		<a href="/powers">Powers</a> | 
+		<a href="/weapons">Weapons</a> | 
+		<a href="/alignments">Alignments</a> | 
+		<a href="/realms">Realms</a><br><br>
+
+
+
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Realm</th>
+			</thead>
+			<tbody>
+				{{#each planet}}
+				<tr>
+					<td>{{name}}</td>
+					<td>{{realm}}</td>
+					<td><button onclick="deletePerson({{id}})">Delete</button></td>
+					<td><a href="/planet/{{id}}">Update</a></td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+
+
+		<h7>Add New Planet</h7>
+		<form>
+			Name:<input type="text" name="name"><br>
+			Realm:<input type="text" name="realm"><br>
+			<input type="submit" value="Submit">
+		</form>
+	</body>
+</html>

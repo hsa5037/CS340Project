@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Marvel Realms</title>
+	</head>
+
+	<body>
+		<h3>Marvel Realms</h3>
+
+		<br><a href="http://web.engr.oregonstate.edu/~moonha/">Home</a> | 
+		<a href="/characters">Characters</a> | 
+		<a href="/planets">Planets</a> | 
+		<a href="/powers">Powers</a> | 
+		<a href="/weapons">Weapons</a> | 
+		<a href="/alignments">Alignments</a> | 
+		<a href="/realms">Realms</a><br><br>
+
+
+		<table>
+			<thead>
+				<th>Name</th>
+			</thead>
+			<tbody>
+				{{#each realm}}
+				<tr>
+					<td>{{name}}</td>
+					<td><button onclick="deletePerson({{id}})">Delete</button></td>
+					<td><a href="/realm/{{id}}">Update</a></td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+
+
+		<h7>Add New Realm</h7>
+		<form>
+			Name:<input type="text" name="name"><br>
+			<input type="submit" value="Submit">
+		</form>
+	</body>
+</html>
