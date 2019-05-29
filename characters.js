@@ -21,7 +21,7 @@ module.exports = function(){
     	function complete(){
     		callbackCount++;
     		if(callbackCount >= 1){
-    			res.render('character', context);
+    			res.render('characters', context);
     		}
     	}
     });
