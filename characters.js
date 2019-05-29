@@ -20,8 +20,8 @@ module.exports = function(){
     	getChars(res, mysql, context, complete);
     	function complete(){
     		callbackCount++;
-    		if(callbackCount >= 2){
-    			res.render('character', context);
+    		if(callbackCount >= 1){
+    			res.render('characters', context);
     		}
     	}
     });
