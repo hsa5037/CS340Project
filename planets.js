@@ -44,11 +44,16 @@ module.exports = function(){
 
     /*Adds a planet*/
     router.post('/', function(req, res){
-        console.log(req.body.homeplanet)
+        console.log(req.body.realm)
         console.log(req.body)
         var mysql = req.app.get('mysql');
-        var sql = "INSERT INTO planet (name, realm) VALUES (?,?)";
-        var inserts = [req.body.name, req.body.realm, req.body.alignment];
+        if(req.body.realm=="none"){
+            var sql = "INSERT INTO planets (name) VALUES (?)";
+        }
+        else{
+            var sql = "INSERT INTO planets (name, realm) VALUES (?,?)";
+        }
+        var inserts = [req.body.name, req.body.realm];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 console.log(JSON.stringify(error))

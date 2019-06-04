@@ -8,9 +8,10 @@
 	<body>
 
 		<h3>Add new planet:</h3>
-		<form>
+		<form id="addplanet" action="/planets" method="post">
 			Name: <input type="text" name="name"><br>
 		    Realm: <select name="realm">
+		    	<option value="none">None</option>
 		        {{#each realm}}
 		        <option value="{{id}}">{{name}}</option>
 		        {{/each}}

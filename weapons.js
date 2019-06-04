@@ -42,13 +42,13 @@ module.exports = function(){
     	}
     });
 
-    /*Adds a planet*/
+    /*Adds a weapon*/
     router.post('/', function(req, res){
-        console.log(req.body.homeplanet)
+        console.log(req.body.wielder)
         console.log(req.body)
         var mysql = req.app.get('mysql');
-        var sql = "INSERT INTO planet (name, realm) VALUES (?,?)";
-        var inserts = [req.body.name, req.body.realm, req.body.alignment];
+        var sql = "INSERT INTO weapons (name, description, wielder) VALUES (?,?,?)";
+        var inserts = [req.body.name, req.body.description, req.body.wielder];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 console.log(JSON.stringify(error))

@@ -4,7 +4,7 @@ module.exports = function(){
 
     /*For getting power list*/
     function getPowers(res, mysql, context, complete){
-        mysql.pool.query("SELECT P.id as id, P.name as name, P.description as description, COUNT(C.name) as numChars FROM powers P INNER JOIN characters_powers CP ON CP.pid=P.id INNER JOIN characters C ON C.id=CP.pid GROUP BY P.name ASC", function(error, results, fields){
+        mysql.pool.query("SELECT P.id as id, P.name as name, P.description as description, COUNT(C.name) as numChars FROM powers P LEFT JOIN characters_powers CP ON CP.pid=P.id LEFT JOIN characters C ON C.id=CP.pid GROUP BY P.name ASC", function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
@@ -38,7 +38,7 @@ module.exports = function(){
         });
     }
 
-    /*Main route to display all planets*/
+    /*Main route to display all powers*/
     router.get('/', function(req, res){
     	var callbackCount = 0;
     	var context = {};
@@ -55,13 +55,12 @@ module.exports = function(){
     	}
     });
 
-    /*Adds a planet*/
+    /*Adds a power*/
     router.post('/', function(req, res){
-        console.log(req.body.homeplanet)
         console.log(req.body)
         var mysql = req.app.get('mysql');
-        var sql = "INSERT INTO planet (name, realm) VALUES (?,?)";
-        var inserts = [req.body.name, req.body.realm, req.body.alignment];
+        var sql = "INSERT INTO powers (name, description) VALUES (?,?)";
+        var inserts = [req.body.name, req.body.description];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 console.log(JSON.stringify(error))
