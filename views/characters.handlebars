@@ -10,7 +10,7 @@
 		<h3>Add new people:</h3>
 		<form id="addcharacter" action="/character" method="post">
 		    Name: <input type="text" name="name"><br>
-		    Home planet: <select name="homeworld"> 
+		    Home planet: <select name="homeworld">
 		        {{#each planets}}
 		        <option value="{{id}}">{{name}}</option>
 		        {{/each}}
@@ -27,7 +27,7 @@
 		<form id='filter_characters' action='' method=''>
 		<!--- this form does not submit directly, the button handles all the interaction with backend -->
 		    <label> Filter by home planet: </label>
-		    <select id='homeplanet_filter' name="homeplanet"> 
+		    <select id='homeplanet_filter' name="homeplanet">
 		        {{#each planets}}
 		        <option value="{{id}}">{{name}}</option>
 		        {{/each}}
