@@ -16,7 +16,7 @@ module.exports = function(){
 
     /*For getting all characters*/
     function getChars(res, mysql, context, complete){
-    	mysql.pool.query("SELECT C.name as name, H.name as planet, A.alignment as alignment FROM characters C INNER JOIN planets H ON H.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment ORDER BY C.name ASC", function(error, results, fields){
+    	mysql.pool.query("SELECT C.id, C.name as name, H.name as planet, A.alignment as alignment FROM characters C INNER JOIN planets H ON H.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment ORDER BY C.name ASC", function(error, results, fields){
     		if(error){
     			res.write(JSON.stringify(error));
     			res.end();
@@ -44,7 +44,7 @@ module.exports = function(){
 
     /*To get ID to update or delete character*/
     function getCharacter(res, mysql, context, id, complete){
-        var sql = "SELECT C.name as name, H.name as planet, A.alignment as alignment FROM characters C INNER JOIN planets H ON H.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment WHERE character_id = ?";
+        var sql = "SELECT C.id, C.name as name, H.name as planet, A.alignment as alignment FROM characters C INNER JOIN planets H ON H.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment WHERE character_id = ?";
         var inserts = [id];
         mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
@@ -90,6 +90,7 @@ module.exports = function(){
         });
     });
 
+
     /*Display one character for the specific purpose of updating*/
     router.get('/:id', function(req, res){
         callbackCount = 0;
@@ -106,6 +107,26 @@ module.exports = function(){
 
         }
     });
+
+    /*Updates a character*/
+    router.put('/:id', function(req, res){
+        var mysql = req.app.get('mysql');
+        console.log(req.body)
+        console.log(req.params.id)
+        var sql = "UPDATE characters SET name=?, homeplanet=?, alignment=? WHERE id=?";
+        var inserts = [req.body.name, req.body.homeplanet, req.body.alignment, req.params.id];
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                console.log(error)
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.status(200);
+                res.end();
+            }
+        });
+    });
+
 
     return router;
 }();

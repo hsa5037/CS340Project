@@ -17,6 +17,8 @@ app.set('view engine', 'handlebars');
 app.set('port', process.argv[2]);
 app.set('mysql', mysql);
 app.use('/characters', require('./characters.js'));
+app.use('/planets', require('./planets.js'));
+app.use('/realms', require('./realms.js'));
 app.use('/', express.static('public'));
 
 app.use(function(req,res){

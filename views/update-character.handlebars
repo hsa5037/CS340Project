@@ -7,8 +7,8 @@
         <option value="{{id}}">{{name}}</option>
         {{/each}}
     </select><br>
-    Alignment: <input type="radio" name="alignment" value="good">Good
-    <input type="radio" name="alignment" value="good">Evil<br>
+    Alignment: <input type="radio" name="alignment" value="1">Good
+    <input type="radio" name="alignment" value="2">Evil<br>
 </form>
 <button onclick="updateChar({{character.id}})">Update</button>
 <script defer>selectPlanet({{character.homeplanet}});</script>
