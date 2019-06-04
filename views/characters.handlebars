@@ -54,18 +54,14 @@
 			<thead>
 				<th>Name</th>
 				<th>Home Planet</th>
-				<th>Weapons</th>
 				<th>Moral Alignment</th>
-				<th>Powers</th>
 			</thead>
 			<tbody>
 				{{#each character}}
 				<tr>
 					<td>{{name}}</td>
-					<td>{{homeplanet}}</td>
-					<td>{{weapons}}</td>
+					<td>{{planet}}</td>
 					<td>{{alignment}}</td>
-					<td>{{powers}}</td>
 					<td><button onclick="deletePerson({{id}})">Delete</button></td>
 					<td><a href="/character/{{id}}">Update</a></td>
 				</tr>

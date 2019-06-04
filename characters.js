@@ -3,7 +3,7 @@ module.exports = function(){
     var router = express.Router();
 
     function getPlanets(res, mysql, context, complete){
-        mysql.pool.query("SELECT id, name FROM homeplanets", function(error, results, fields){
+        mysql.pool.query("SELECT id, name FROM planets", function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
@@ -14,12 +14,12 @@ module.exports = function(){
     }
 
     function getChars(res, mysql, context, complete){
-    	mysql.pool.query("SELECT C.name, H.name, P.name, A.alignment FROM characters C INNER JOIN characters_powers CP ON CP.cid = C.id INNER JOIN powers P ON P.id = CP.pid INNER JOIN planets H ON H.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment ORDER BY C.name ASC;", function(error, results, fields){
+    	mysql.pool.query("SELECT C.name as name, H.name as planet, A.alignment as alignment FROM characters C INNER JOIN planets H ON H.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment ORDER BY C.name ASC;", function(error, results, fields){
     		if(error){
     			res.write(JSON.stringify(error));
     			res.end();
     		}
-    		context.characters = results;
+    		context.character = results;
     		complete();
     	});
     }
