@@ -14,9 +14,9 @@ module.exports = function(){
         });
     }
 
-    /*For getting all planets*/
+    /*For getting all weapons*/
     function getWeapons(res, mysql, context, complete){
-    	mysql.pool.query("SELECT W.name as name, W.description as description, C.name as wielder FROM weapons W INNER JOIN characters C ON C.id=W.wielder", function(error, results, fields){
+    	mysql.pool.query("SELECT W.name as name, W.description as description, C.name as wielder FROM weapons W LEFT JOIN characters C ON C.id=W.wielder", function(error, results, fields){
     		if(error){
     			res.write(JSON.stringify(error));
     			res.end();
@@ -26,7 +26,7 @@ module.exports = function(){
     	});
     }
 
-    /*Main route to display all planets*/
+    /*Main route to display all weapons*/
     router.get('/', function(req, res){
     	var callbackCount = 0;
     	var context = {};
@@ -47,7 +47,13 @@ module.exports = function(){
         console.log(req.body.wielder)
         console.log(req.body)
         var mysql = req.app.get('mysql');
-        var sql = "INSERT INTO weapons (name, description, wielder) VALUES (?,?,?)";
+        if(req.body.wielder=="none"){
+            var sql = "INSERT INTO weapons (name, description) VALUES (?,?)";
+        }
+        else{
+            var sql = "INSERT INTO weapons (name, description, wielder) VALUES (?,?,?)";
+        }
+        
         var inserts = [req.body.name, req.body.description, req.body.wielder];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
