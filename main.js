@@ -19,6 +19,8 @@ app.set('mysql', mysql);
 app.use('/characters', require('./characters.js'));
 app.use('/planets', require('./planets.js'));
 app.use('/realms', require('./realms.js'));
+app.use('/weapons', require('./weapons.js'));
+app.use('/powers', require('./powers.js'));
 app.use('/', express.static('public'));
 
 app.use(function(req,res){

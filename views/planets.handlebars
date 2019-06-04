@@ -18,6 +18,29 @@
 			<input type="submit" value="Submit">
 		</form><br />
 
+
+		<!-- SEARCH & FILTER OPTIONS IN PROGRESS -->
+
+		<h3>Search and filter:</h3>
+		<form id='filter_planets' action='' method=''>
+		<!--- this form does not submit directly, the button handles all the interaction with backend -->
+		    <label> Filter by realm: </label>
+		    <select id='realm_filter' name="realm">
+		        {{#each realm}}
+		        <option value="{{id}}">{{name}}</option>
+		        {{/each}}
+		    </select><br>
+		    <input type="button" value="Filter" onclick="filterPlanetsByRealm()"><br><br>
+		</form>
+
+		<form id='search_planet' action='' method=''>
+		<!--- this form does not submit directly, the button handles all the interaction with backend -->
+		    <label> Search planets for name starting with:</label>
+		    <input id='name_search_string' type='text' name='name_search_string' value=''>
+		    <input type="button" value="Search" onclick="searchPlanetsByName()">
+		</form>
+
+
 		<h2>Current planet list:</h2>
 		<table>
 			<thead>
