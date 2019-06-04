@@ -2,7 +2,7 @@ module.exports = function(){
     var express = require('express');
     var router = express.Router();
 
-    /*For getting all powers*/
+    /*For getting power list*/
     function getPowers(res, mysql, context, complete){
         mysql.pool.query("SELECT P.id as id, P.name as name, P.description as description, COUNT(C.name) as numChars FROM powers P INNER JOIN characters_powers CP ON CP.pid=P.id INNER JOIN characters C ON C.id=CP.pid GROUP BY P.name ASC", function(error, results, fields){
             if(error){
@@ -14,7 +14,7 @@ module.exports = function(){
         });
     }
 
-    /*For populating character list*/
+    /*For populating character selection list*/
     function getChars(res, mysql, context, complete){
         mysql.pool.query("SELECT id, name as name FROM characters", function(error, results, fields){
             if(error){
@@ -22,6 +22,18 @@ module.exports = function(){
                 res.end();
             }
             context.character = results;
+            complete();
+        });
+    }
+
+    /*For getting powers with characters attached*/
+    function getPowerChar(res, mysql, context, complete){
+        mysql.pool.query("SELECT P.name as name, C.name as charName FROM powers P INNER JOIN characters_powers CP ON CP.pid=P.id INNER JOIN characters C ON C.id=CP.cid ORDER BY P.name ASC", function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.powerChar = results;
             complete();
         });
     }
@@ -34,10 +46,11 @@ module.exports = function(){
     	var mysql = req.app.get('mysql');
     	getPowers(res, mysql, context, complete);
         getChars(res, mysql, context, complete);
+        getPowerChar(res, mysql, context, complete);
     	function complete(){
     		callbackCount++;
-    		if(callbackCount >= 2){
-    			res.render('planets', context);
+    		if(callbackCount >= 3){
+    			res.render('powers', context);
     		}
     	}
     });
@@ -55,7 +68,7 @@ module.exports = function(){
                 res.write(JSON.stringify(error));
                 res.end();
             }else{
-                res.redirect('/planets');
+                res.redirect('/powers');
             }
         });
     });

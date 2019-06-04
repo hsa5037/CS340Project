@@ -2,26 +2,26 @@ module.exports = function(){
     var express = require('express');
     var router = express.Router();
 
-    /*For populating realm selection list*/
-    function getRealms(res, mysql, context, complete){
-        mysql.pool.query("SELECT id, name FROM realms", function(error, results, fields){
+    /*For populating character selection list*/
+    function getChars(res, mysql, context, complete){
+        mysql.pool.query("SELECT id, name as name FROM characters", function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
             }
-            context.realm = results;
+            context.character = results;
             complete();
         });
     }
 
     /*For getting all planets*/
-    function getPlanets(res, mysql, context, complete){
-    	mysql.pool.query("SELECT P.id, P.name as name, R.name as realm FROM planets P LEFT JOIN realms R ON P.realm=R.id ORDER BY P.name ASC", function(error, results, fields){
+    function getWeapons(res, mysql, context, complete){
+    	mysql.pool.query("SELECT W.name as name, W.description as description, C.name as wielder FROM weapons W INNER JOIN characters C ON C.id=W.wielder", function(error, results, fields){
     		if(error){
     			res.write(JSON.stringify(error));
     			res.end();
     		}
-    		context.planet = results;
+    		context.weapon = results;
     		complete();
     	});
     }
@@ -32,12 +32,12 @@ module.exports = function(){
     	var context = {};
         //context.jsscripts = ["deleteplanet.js","searchchar.js"];
     	var mysql = req.app.get('mysql');
-    	getRealms(res, mysql, context, complete);
-        getPlanets(res, mysql, context, complete);
+    	getChars(res, mysql, context, complete);
+        getWeapons(res, mysql, context, complete);
     	function complete(){
     		callbackCount++;
     		if(callbackCount >= 2){
-    			res.render('planets', context);
+    			res.render('weapons', context);
     		}
     	}
     });
@@ -55,7 +55,7 @@ module.exports = function(){
                 res.write(JSON.stringify(error));
                 res.end();
             }else{
-                res.redirect('/planets');
+                res.redirect('/weapons');
             }
         });
     });

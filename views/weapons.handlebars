@@ -6,17 +6,36 @@
 	</head>
 
 	<body>
-		<h3>Marvel Weapons</h3>
 
-		<br><a href="/">Home</a> | 
-		<a href="/characters">Characters</a> | 
-		<a href="/planets">Planets</a> | 
-		<a href="/powers">Powers</a> | 
-		<a href="/weapons">Weapons</a> | 
-		<a href="/alignments">Alignments</a> | 
-		<a href="/realms">Realms</a><br><br>
+		<h3>Add new weapon:</h3>
+		<form>
+			Name: <input type="text" name="name"><br>
+			Description: <input type="text" name="description"><br>
+		    Wielder: <select name="wielder">
+		        {{#each character}}
+		        <option value="{{id}}">{{name}}</option>
+		        {{/each}}
+		    </select><br>
+			<input type="submit" value="Submit">
+		</form><br />
 
 
+		<!-- SEARCH & FILTER OPTIONS IN PROGRESS -->
+
+		<h3>Search and filter:</h3>
+		<form id='filter_weapon' action='' method=''>
+		<!--- this form does not submit directly, the button handles all the interaction with backend -->
+		    <label> Filter by character: </label>
+		    <select id='weapon_filter' name="weapon">
+		        {{#each character}}
+		        <option value="{{id}}">{{name}}</option>
+		        {{/each}}
+		    </select><br>
+		    <input type="button" value="Filter" onclick="filterWeaponsByCharacter()"><br><br>
+		</form>
+
+
+		<h2>Current weapons list:</h2>
 		<table>
 			<thead>
 				<th>Name</th>
@@ -29,20 +48,12 @@
 					<td>{{name}}</td>
 					<td>{{description}}</td>
 					<td>{{wielder}}</td>
-					<td><button onclick="deletePerson({{id}})">Delete</button></td>
-					<td><a href="/weapon/{{id}}">Update</a></td>
+					<td><button onclick="deletePlanet({{id}})">Delete</button></td>
+					<td><a href="/planets/{{id}}">Update</a></td>
 				</tr>
 				{{/each}}
 			</tbody>
 		</table>
 
-
-		<h7>Add New Weapon</h7>
-		<form>
-			Name:<input type="text" name="name"><br>
-			Description:<input type="text" name="desciption"><br>
-			Wielder<input type="text" name="wielder"><br>
-			<input type="submit" value="Submit">
-		</form>
 	</body>
 </html>

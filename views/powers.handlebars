@@ -61,7 +61,7 @@
 			<thead>
 				<th>Name</th>
 				<th>Description</th>
-				<th>Used by # Characters</th>
+				<th>Used by # of Characters</th>
 			</thead>
 			<tbody>
 				{{#each power}}
@@ -69,8 +69,24 @@
 					<td>{{name}}</td>
 					<td>{{description}}</td>
 					<td>{{numChars}}</td>
-					<td><button onclick="deletePlanet({{id}})">Delete</button></td>
-					<td><a href="/planets/{{id}}">Update</a></td>
+					<td><button onclick="deletePower({{id}})">Delete</button></td>
+					<td><a href="/powers/{{id}}">Update</a></td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+
+		<h2>Current character/power list:</h2>
+		<table>
+			<thead>
+				<th>Power</th>
+				<th>Character</th>
+			</thead>
+			<tbody>
+				{{#each powerChar}}
+				<tr>
+					<td>{{name}}</td>
+					<td>{{charName}}</td>
 				</tr>
 				{{/each}}
 			</tbody>
