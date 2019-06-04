@@ -14,9 +14,21 @@ module.exports = function(){
         });
     }
 
+    /*For populating world selection list*/
+    function getPowers(res, mysql, context, complete){
+        mysql.pool.query("SELECT id, name FROM powers", function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.power = results;
+            complete();
+        });
+    }
+
     /*For getting all characters*/
     function getChars(res, mysql, context, complete){
-    	mysql.pool.query("SELECT C.id, C.name as name, H.name as planet, A.alignment as alignment FROM characters C INNER JOIN planets H ON H.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment ORDER BY C.name ASC", function(error, results, fields){
+    	mysql.pool.query("SELECT C.id as id, C.name as name, H.name as planet, A.alignment as alignment FROM characters C INNER JOIN planets H ON H.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment ORDER BY C.name ASC", function(error, results, fields){
     		if(error){
     			res.write(JSON.stringify(error));
     			res.end();
@@ -42,16 +54,16 @@ module.exports = function(){
         });
     }*/
 
-    /*To get ID to update or delete character*/
-    function getCharacter(res, mysql, context, id, complete){
-        var sql = "SELECT C.id, C.name as name, H.name as planet, A.alignment as alignment FROM characters C INNER JOIN planets H ON H.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment WHERE character_id = ?";
+    /*To get ID for a character*/
+    function getOneChar(res, mysql, context, id, complete){
+        var sql = "SELECT C.id as id, C.name as name, H.name as planet, A.alignment as alignment FROM characters C INNER JOIN planets H ON H.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment WHERE C.id = ?";
         var inserts = [id];
         mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
             }
-            context.character = results[0];
+            context.selectChar = results[0];
             complete();
         });
     }
@@ -63,21 +75,47 @@ module.exports = function(){
         context.jsscripts = ["deletechar.js","filterchar.js","searchchar.js"];
     	var mysql = req.app.get('mysql');
     	getChars(res, mysql, context, complete);
+        getPowers(res, mysql, context, complete);
         getPlanets(res, mysql, context, complete);
     	function complete(){
     		callbackCount++;
-    		if(callbackCount >= 2){
+    		if(callbackCount >= 3){
     			res.render('characters', context);
     		}
     	}
     });
+
+
+    /*Display one character for the specific purpose of updating*/
+    router.get('/:id', function(req, res){
+        callbackCount = 0;
+        var context = {};
+        context.jsscripts = ["selectedplanet.js", "updatechar.js"];
+        var mysql = req.app.get('mysql');
+        getOneChar(res, mysql, context, req.params.id, complete);
+        getPlanets(res, mysql, context, complete);
+        function complete(){
+            callbackCount++;
+            if(callbackCount >= 2){
+                res.render('update-character', context);
+            }
+
+        }
+    });
+
 
     /*Adds a character*/
     router.post('/', function(req, res){
         console.log(req.body.homeplanet)
         console.log(req.body)
         var mysql = req.app.get('mysql');
-        var sql = "INSERT INTO characters (name, homeplanet, alignment) VALUES (?,?,?)";
+        if(req.body.power=="none"){
+            var sql = "INSERT INTO characters (name, homeplanet, alignment) VALUES (?,?,?)";
+        }
+        else{
+            var sql = "INSERT INTO characters (name, homeplanet, alignment) VALUES (?,?,?)";
+            /** Need code here to add a power **/
+        }
         var inserts = [req.body.name, req.body.homeplanet, req.body.alignment];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
@@ -88,24 +126,6 @@ module.exports = function(){
                 res.redirect('/characters');
             }
         });
-    });
-
-
-    /*Display one character for the specific purpose of updating*/
-    router.get('/:id', function(req, res){
-        callbackCount = 0;
-        var context = {};
-        context.jsscripts = ["selectedplanet.js", "updatechar.js"];
-        var mysql = req.app.get('mysql');
-        getChars(res, mysql, context, req.params.id, complete);
-        getPlanets(res, mysql, context, complete);
-        function complete(){
-            callbackCount++;
-            if(callbackCount >= 2){
-                res.render('update-character', context);
-            }
-
-        }
     });
 
     /*Updates a character*/
