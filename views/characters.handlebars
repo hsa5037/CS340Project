@@ -8,15 +8,15 @@
 	<body>
 
 		<h3>Add new people:</h3>
-		<form id="addcharacter" action="/character" method="post">
+		<form id="addcharacter" action="/characters" method="post">
 		    Name: <input type="text" name="name"><br>
-		    Home planet: <select name="homeworld">
+		    Home planet: <select name="homeplanet">
 		        {{#each planets}}
 		        <option value="{{id}}">{{name}}</option>
 		        {{/each}}
 		    </select><br>
-		    Alignment: <input type="radio" name="alignment" value="good">Good
-		    <input type="radio" name="alignment" value="good">Evil<br>
+		    Alignment: <input type="radio" name="alignment" value="1">Good
+		    <input type="radio" name="alignment" value="2">Evil<br>
 		    <input type="submit" value="Submit">
 		 </form>
 		<br/>
@@ -62,7 +62,7 @@
 					<td>{{name}}</td>
 					<td>{{planet}}</td>
 					<td>{{alignment}}</td>
-					<td><button onclick="deletePerson({{id}})">Delete</button></td>
+					<td><button onclick="deleteChar({{id}})">Delete</button></td>
 					<td><a href="/character/{{id}}">Update</a></td>
 				</tr>
 				{{/each}}
