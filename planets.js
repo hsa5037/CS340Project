@@ -16,7 +16,7 @@ module.exports = function(){
 
     /*For getting all planets*/
     function getPlanets(res, mysql, context, complete){
-    	mysql.pool.query("SELECT P.id, P.name as name, R.name as realm FROM planets P INNER JOIN realms R ON P.realm=R.id ORDER BY P.name ASC", function(error, results, fields){
+    	mysql.pool.query("SELECT P.id, P.name as name, R.name as realm FROM planets P LEFT JOIN realms R ON P.realm=R.id ORDER BY P.name ASC", function(error, results, fields){
     		if(error){
     			res.write(JSON.stringify(error));
     			res.end();
