@@ -16,7 +16,7 @@ module.exports = function(){
 
     /*For getting all weapons*/
     function getWeapons(res, mysql, context, complete){
-    	mysql.pool.query("SELECT W.name as name, W.description as description, C.name as wielder FROM weapons W LEFT JOIN characters C ON C.id=W.wielder", function(error, results, fields){
+    	mysql.pool.query("SELECT W.id as id, W.name as name, W.description as description, C.name as wielder FROM weapons W LEFT JOIN characters C ON C.id=W.wielder", function(error, results, fields){
     		if(error){
     			res.write(JSON.stringify(error));
     			res.end();

@@ -1,0 +1,7 @@
+<html>
+<h1>Update {{selectRealm.name}}:</h1>
+<form id="update-realm" action="/realms" method="post">
+    Name: <input type="text" name="name" value="{{selectRealm.name}}"><br>
+</form>
+<button onclick="updateRealm({{selectRealm.id}})">Update</button>
+</html>

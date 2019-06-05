@@ -4,12 +4,26 @@ module.exports = function(){
 
     /*For getting all realms*/
     function getRealms(res, mysql, context, complete){
-        mysql.pool.query("SELECT R.name, COUNT(P.name) as planet_count FROM realms R LEFT JOIN planets P ON P.realm=R.id GROUP BY R.name ASC", function(error, results, fields){
+        mysql.pool.query("SELECT R.id as id, R.name, COUNT(P.name) as planet_count FROM realms R LEFT JOIN planets P ON P.realm=R.id GROUP BY R.name ASC", function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
             }
             context.realm = results;
+            complete();
+        });
+    }
+
+    /*To get ID for a realm*/
+    function getOneRealm(res, mysql, context, id, complete){
+        var sql = "SELECT id, name FROM realms WHERE id = ?";
+        var inserts = [id];
+        mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.selectRealm = results[0];
             complete();
         });
     }
@@ -29,6 +43,24 @@ module.exports = function(){
     	}
     });
 
+
+    /*Display one realm for the specific purpose of updating*/
+    router.get('/:id', function(req, res){
+        callbackCount = 0;
+        var context = {};
+        context.jsscripts = ["updaterealm.js"];
+        var mysql = req.app.get('mysql');
+        getOneRealm(res, mysql, context, req.params.id, complete);
+        function complete(){
+            callbackCount++;
+            if(callbackCount >= 1){
+                res.render('update-realm', context);
+            }
+
+        }
+    });
+
+
     /*Adds a realm*/
     router.post('/', function(req, res){
         console.log(req.body)
@@ -42,6 +74,25 @@ module.exports = function(){
                 res.end();
             }else{
                 res.redirect('/realms');
+            }
+        });
+    });
+
+    /*Updates a realm*/
+    router.put('/:id', function(req, res){
+        var mysql = req.app.get('mysql');
+        console.log(req.body)
+        console.log(req.params.id)
+        var sql = "UPDATE realms SET name=? WHERE id=?";
+        var inserts = [req.body.name, req.params.id];
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                console.log(error)
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.status(200);
+                res.end();
             }
         });
     });
