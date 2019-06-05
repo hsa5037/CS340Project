@@ -26,6 +26,20 @@ module.exports = function(){
     	});
     }
 
+    /*To get ID for a weapon*/
+    function getOneWeapon(res, mysql, context, id, complete){
+        var sql = "SELECT W.id as id, W.name as name, W.description as description, C.name as wielder FROM weapons W LEFT JOIN characters C ON C.id=W.wielder WHERE W.id = ?";
+        var inserts = [id];
+        mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.selectWeapon = results[0];
+            complete();
+        });
+    }
+
     /*Main route to display all weapons*/
     router.get('/', function(req, res){
     	var callbackCount = 0;
@@ -42,6 +56,25 @@ module.exports = function(){
     	}
     });
 
+
+    /*Display one weapon for the specific purpose of updating*/
+    router.get('/:id', function(req, res){
+        callbackCount = 0;
+        var context = {};
+        context.jsscripts = ["selectedchar.js", "updateweapon.js"];
+        var mysql = req.app.get('mysql');
+        getOneWeapon(res, mysql, context, req.params.id, complete);
+        getChars(res, mysql, context, complete);
+        function complete(){
+            callbackCount++;
+            if(callbackCount >= 2){
+                res.render('update-weapon', context);
+            }
+
+        }
+    });
+
+
     /*Adds a weapon*/
     router.post('/', function(req, res){
         console.log(req.body.wielder)
@@ -53,7 +86,6 @@ module.exports = function(){
         else{
             var sql = "INSERT INTO weapons (name, description, wielder) VALUES (?,?,?)";
         }
-        
         var inserts = [req.body.name, req.body.description, req.body.wielder];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
@@ -62,6 +94,26 @@ module.exports = function(){
                 res.end();
             }else{
                 res.redirect('/weapons');
+            }
+        });
+    });
+
+    /*Updates a weapon*/
+    router.put('/:id', function(req, res){
+        var mysql = req.app.get('mysql');
+        console.log(req.body.wielder)
+        console.log(req.body)
+        console.log(req.params.id)
+        var sql = "UPDATE weapons SET name=?, description=?, wielder=NULLIF(?, 'none') WHERE id=?";
+        var inserts = [req.body.name, req.body.description, req.body.wielder, req.params.id];
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                console.log(error)
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.status(200);
+                res.end();
             }
         });
     });

@@ -26,6 +26,20 @@ module.exports = function(){
     	});
     }
 
+    /*To get ID for a planet*/
+    function getOnePlanet(res, mysql, context, id, complete){
+        var sql = "SELECT P.id as id, P.name as name, R.name as realm FROM planets P LEFT JOIN realms R ON P.realm=R.id WHERE P.id = ?";
+        var inserts = [id];
+        mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.selectPlanet = results[0];
+            complete();
+        });
+    }
+
     /*Main route to display all planets*/
     router.get('/', function(req, res){
     	var callbackCount = 0;
@@ -41,6 +55,25 @@ module.exports = function(){
     		}
     	}
     });
+
+
+    /*Display one character for the specific purpose of updating*/
+    router.get('/:id', function(req, res){
+        callbackCount = 0;
+        var context = {};
+        context.jsscripts = ["selectedrealm.js", "updateplanet.js"];
+        var mysql = req.app.get('mysql');
+        getOnePlanet(res, mysql, context, req.params.id, complete);
+        getRealms(res, mysql, context, complete);
+        function complete(){
+            callbackCount++;
+            if(callbackCount >= 2){
+                res.render('update-planet', context);
+            }
+
+        }
+    });
+
 
     /*Adds a planet*/
     router.post('/', function(req, res){
@@ -61,6 +94,25 @@ module.exports = function(){
                 res.end();
             }else{
                 res.redirect('/planets');
+            }
+        });
+    });
+
+    /*Updates a realm*/
+    router.put('/:id', function(req, res){
+        var mysql = req.app.get('mysql');
+        console.log(req.body)
+        console.log(req.params.id)
+        var sql = "UPDATE planets SET name=?, realm=? WHERE id=?";
+        var inserts = [req.body.name, req.body.realm, req.params.id];
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                console.log(error)
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.status(200);
+                res.end();
             }
         });
     });

@@ -1,8 +1,8 @@
-function updateChar(id){
+function updatePlanet(id){
     $.ajax({
-        url: '/characters/' + id,
+        url: '/planets/' + id,
         type: 'PUT',
-        data: $('#update-character').serialize(),
+        data: $('#update-planet').serialize(),
         success: function(result){
             window.location.replace("./");
         }

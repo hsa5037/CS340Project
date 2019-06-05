@@ -1,8 +1,8 @@
-function updateChar(id){
+function updateWeapon(id){
     $.ajax({
-        url: '/characters/' + id,
+        url: '/weapons/' + id,
         type: 'PUT',
-        data: $('#update-character').serialize(),
+        data: $('#update-weapon').serialize(),
         success: function(result){
             window.location.replace("./");
         }
