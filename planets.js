@@ -44,7 +44,7 @@ module.exports = function(){
     router.get('/', function(req, res){
     	var callbackCount = 0;
     	var context = {};
-        //context.jsscripts = ["deleteplanet.js","searchchar.js"];
+        context.jsscripts = ["deleteplanet.js","searchchar.js"];
     	var mysql = req.app.get('mysql');
     	getRealms(res, mysql, context, complete);
         getPlanets(res, mysql, context, complete);
