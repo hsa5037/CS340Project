@@ -28,7 +28,7 @@ module.exports = function(){
 
     /*For getting all characters*/
     function getChars(res, mysql, context, complete){
-    	mysql.pool.query("SELECT C.id as id, C.name as name, H.name as planet, A.alignment as alignment FROM characters C INNER JOIN planets H ON H.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment ORDER BY C.name ASC", function(error, results, fields){
+    	mysql.pool.query("SELECT C.id as id, C.name as name, H.name as planet, A.alignment as alignment FROM characters C LEFT JOIN planets H ON H.id = C.homeplanet LEFT JOIN alignment A ON A.id = C.alignment ORDER BY C.name ASC", function(error, results, fields){
     		if(error){
     			res.write(JSON.stringify(error));
     			res.end();
@@ -109,13 +109,14 @@ module.exports = function(){
         console.log(req.body.homeplanet)
         console.log(req.body)
         var mysql = req.app.get('mysql');
-        if(req.body.power=="none"){
+        /** Working on this... **/
+        /*if(req.body.power=="none"){
             var sql = "INSERT INTO characters (name, homeplanet, alignment) VALUES (?,?,?)";
         }
         else{
             var sql = "INSERT INTO characters (name, homeplanet, alignment) VALUES (?,?,?)";
-            /** Need code here to add a power **/
-        }
+        
+        }*/
         var inserts = [req.body.name, req.body.homeplanet, req.body.alignment];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
