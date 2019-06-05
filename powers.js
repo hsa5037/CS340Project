@@ -38,6 +38,20 @@ module.exports = function(){
         });
     }
 
+    /*To get ID for a power*/
+    function getOnePower(res, mysql, context, id, complete){
+        var sql = "SELECT id, name, description FROM powers WHERE id = ?";
+        var inserts = [id];
+        mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.selectPower = results[0];
+            complete();
+        });
+    }
+
     /*Main route to display all powers*/
     router.get('/', function(req, res){
     	var callbackCount = 0;
@@ -55,6 +69,24 @@ module.exports = function(){
     	}
     });
 
+
+    /*Display one power for the specific purpose of updating*/
+    router.get('/:id', function(req, res){
+        callbackCount = 0;
+        var context = {};
+        context.jsscripts = ["updatepower.js"];
+        var mysql = req.app.get('mysql');
+        getOnePower(res, mysql, context, req.params.id, complete);
+        function complete(){
+            callbackCount++;
+            if(callbackCount >= 1){
+                res.render('update-power', context);
+            }
+
+        }
+    });
+
+
     /*Adds a power*/
     router.post('/', function(req, res){
         console.log(req.body)
@@ -68,6 +100,25 @@ module.exports = function(){
                 res.end();
             }else{
                 res.redirect('/powers');
+            }
+        });
+    });
+
+    /*Updates a power*/
+    router.put('/:id', function(req, res){
+        var mysql = req.app.get('mysql');
+        console.log(req.body)
+        console.log(req.params.id)
+        var sql = "UPDATE powers SET name=?, description=? WHERE id=?";
+        var inserts = [req.body.name, req.body.description, req.params.id];
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                console.log(error)
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.status(200);
+                res.end();
             }
         });
     });

@@ -1,8 +1,8 @@
-function updateChar(id){
+function updatePower(id){
     $.ajax({
-        url: '/characters/' + id,
+        url: '/powers/' + id,
         type: 'PUT',
-        data: $('#update-character').serialize(),
+        data: $('#update-power').serialize(),
         success: function(result){
             window.location.replace("./");
         }
