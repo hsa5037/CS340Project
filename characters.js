@@ -56,7 +56,7 @@ module.exports = function(){
 
     /*To get ID for a character*/
     function getOneChar(res, mysql, context, id, complete){
-        var sql = "SELECT C.id as id, C.name as name, H.name as planet, A.alignment as alignment FROM characters C INNER JOIN planets H ON H.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment WHERE C.id = ?";
+        var sql = "SELECT C.id as id, C.name as name, H.name as planet, A.alignment as alignment FROM characters C LEFT JOIN planets H ON H.id = C.homeplanet LEFT JOIN alignment A ON A.id = C.alignment WHERE C.id = ?";
         var inserts = [id];
         mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
@@ -109,14 +109,7 @@ module.exports = function(){
         console.log(req.body.homeplanet)
         console.log(req.body)
         var mysql = req.app.get('mysql');
-        /** Working on this... **/
-        /*if(req.body.power=="none"){
-            var sql = "INSERT INTO characters (name, homeplanet, alignment) VALUES (?,?,?)";
-        }
-        else{
-            var sql = "INSERT INTO characters (name, homeplanet, alignment) VALUES (?,?,?)";
-        
-        }*/
+        var sql = "INSERT INTO characters (name, homeplanet, alignment) VALUES (?, NULLIF(?,'none'), ?)";
         var inserts = [req.body.name, req.body.homeplanet, req.body.alignment];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
