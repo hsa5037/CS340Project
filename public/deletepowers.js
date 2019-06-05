@@ -1,4 +1,4 @@
-function deletepower(id){
+function deletePower(id){
     $.ajax({
         url: '/powers/' + id,
         type: 'DELETE',

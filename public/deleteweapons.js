@@ -1,4 +1,4 @@
-function deleteweapon(id){
+function deleteWeapon(id){
     $.ajax({
         url: '/weapons/' + id,
         type: 'DELETE',
