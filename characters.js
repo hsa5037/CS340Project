@@ -38,7 +38,6 @@ module.exports = function(){
     	});
     }
 
-
     /*For filtering by planet*/
     function getCharByPlanet(req, res, mysql, context, complete){
       var query = "SELECT C.name as name, P.name as planet, A.alignment as alignment FROM characters C INNER JOIN planets P ON P.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment WHERE P.id = ?;";

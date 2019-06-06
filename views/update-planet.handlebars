@@ -1,4 +1,47 @@
 <html>
+<style type="text/css">
+    body {
+      background-color: #401515;
+      color: white;
+      font-family: arial;
+      background-image: url("https://i.imgur.com/V3mfvJy.png");
+      background-repeat: repeat;
+    }
+    input, select, button {
+      border-radius: 5px;
+      padding: 3px;
+      margin: 5px;
+      color: white;
+      background-color: #000000;
+      border: 2px solid #af0000;
+    }
+    .area {
+      border-radius: 5px;
+      padding: 2px;
+      margin: 5px;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.1);
+      border: 2px solid #af0000;
+    }
+    a:link {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:visited {
+      color: white;
+      text-decoration: none;
+    }
+    a:hover {
+      color: red;
+      text-decoration: none;
+    }
+    a:active {
+      color: yellow;
+      text-decoration: none;
+    }
+</style>
+
 <h1>Update {{selectPlanet.name}}:</h1>
 <form id="update-planet" action="/planets" method="post">
     Name: <input type="text" name="name" value="{{selectPlanet.name}}"><br>
