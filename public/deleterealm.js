@@ -1,6 +1,6 @@
-function deleterealm(id){
+function deleteRealm(id){
     $.ajax({
-        url: '/realm/' + id,
+        url: '/realms/' + id,
         type: 'DELETE',
         success: function(result){
             window.location.reload(true);
