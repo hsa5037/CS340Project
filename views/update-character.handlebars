@@ -3,6 +3,8 @@
 <form id="update-character" action="/characters" method="post">
     Name: <input type="text" name="name" value="{{selectChar.name}}"><br>
     Homeworld: <select name="homeplanet" id="planet-selector"> 
+		<option value="{{selectChar.homeplanet}}">Keep as is</option>
+		<option value="none">None</option>
         {{#each planets}}
         <option value="{{id}}">{{name}}</option>
         {{/each}}

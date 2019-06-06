@@ -11,18 +11,13 @@
 		<form id="addcharacter" action="/characters" method="post">
 		    Name: <input type="text" name="name"><br>
 		    Home planet: <select name="homeplanet">
+		    	<option value="none">None</option>
 		        {{#each planets}}
 		        <option value="{{id}}">{{name}}</option>
 		        {{/each}}
 		    </select><br>
-		    Alignment: <input type="radio" name="alignment" value="1">Good
+		    Alignment: <input type="radio" name="alignment" value="1" checked="checked" required>Good
 		    <input type="radio" name="alignment" value="2">Evil<br>
-		    Add a power: <select name="power">
-		        <option value="none">None</option>
-		        {{#each power}}
-		        <option value="{{id}}">{{name}}</option>
-		        {{/each}}
-		    </select><br>
 		    <input type="submit" value="Submit">
 		 </form>
 
