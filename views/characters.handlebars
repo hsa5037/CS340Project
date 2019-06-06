@@ -28,12 +28,12 @@
 		<form id='filter_characters' action='' method=''>
 		<!--- this form does not submit directly, the button handles all the interaction with backend -->
 		    <label> Filter by home planet: </label>
-		    <select id='homeplanet_filter' name="homeplanet">
+		    <select id='planet_filter' name="planet">
 		        {{#each planets}}
 		        <option value="{{id}}">{{name}}</option>
 		        {{/each}}
 		    </select><br>
-		    <input type="button" value="Filter" onclick="filterCharactersByPlanet()"><br><br>
+		    <input type="button" value="Filter" onclick="filterCharByPlanet()"><br><br>
 
 		    <label> Filter by alignment: </label>
 		    <input type="radio" name="alignment" value="good">Good

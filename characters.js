@@ -40,10 +40,10 @@ module.exports = function(){
 
 
     /*For filtering by planet*/
-/*    function getCharbyPlanet(req, res, mysql, context, complete){
-      var query = "SELECT C.name as name, H.name as planet, A.alignment as alignment FROM characters C INNER JOIN planets H ON H.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment WHERE H.name = ?";
+    function getCharByPlanet(req, res, mysql, context, complete){
+      var query = "SELECT C.name as name, P.name as planet, A.alignment as alignment FROM characters C INNER JOIN planets P ON P.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment WHERE P.id = ?;";
       console.log(req.params)
-      var inserts = [req.params.homeworld]
+      var inserts = [req.params.homeplanet]
       mysql.pool.query(query, inserts, function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
@@ -52,7 +52,7 @@ module.exports = function(){
             context.character = results;
             complete();
         });
-    }*/
+    }
 
     /*To get ID for a character*/
     function getOneChar(res, mysql, context, id, complete){
@@ -85,6 +85,22 @@ module.exports = function(){
     	}
     });
 
+    router.get('/filter/:homeplanet', function(req, res){
+        var callbackCount = 0;
+        var context = {};
+        context.jsscripts = ["deletechar.js","filterchar.js","searchchar.js"];
+        var mysql = req.app.get('mysql');
+        getCharByPlanet(req,res, mysql, context, complete);
+        getPlanets(res, mysql, context, complete);
+        function complete(){
+            callbackCount++;
+            if(callbackCount >= 2){
+                res.render('characters', context);
+            }
+
+        }
+    });
+
 
     /*Display one character for the specific purpose of updating*/
     router.get('/:id', function(req, res){
@@ -102,6 +118,8 @@ module.exports = function(){
 
         }
     });
+
+
 
 
     /*Adds a character*/
