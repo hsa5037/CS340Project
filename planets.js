@@ -26,6 +26,21 @@ module.exports = function(){
     	});
     }
 
+    //Filter Planets by realm
+    function getPlanetByRealm(req, res, mysql, context, complete){
+      var query = "SELECT P.name as name, R.name as realm FROM planets P INNER JOIN realms R ON R.id = P.realm WHERE R.id = ?;";
+      console.log(req.params)
+      var inserts = [req.params.realm]
+      mysql.pool.query(query, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.planet = results;
+            complete();
+        });
+    }
+
     /*To get ID for a planet*/
     function getOnePlanet(res, mysql, context, id, complete){
         var sql = "SELECT P.id as id, P.name as name, R.name as realm FROM planets P LEFT JOIN realms R ON P.realm=R.id WHERE P.id = ?";
@@ -44,7 +59,7 @@ module.exports = function(){
     router.get('/', function(req, res){
     	var callbackCount = 0;
     	var context = {};
-        context.jsscripts = ["deleteplanet.js","searchchar.js"];
+        context.jsscripts = ["deleteplanet.js","searchchar.js", "filterplanets.js", "searchplanets.js"];
     	var mysql = req.app.get('mysql');
     	getRealms(res, mysql, context, complete);
         getPlanets(res, mysql, context, complete);
@@ -54,6 +69,22 @@ module.exports = function(){
     			res.render('planets', context);
     		}
     	}
+    });
+
+    router.get('/filter/:realm', function(req, res){
+        var callbackCount = 0;
+        var context = {};
+        context.jsscripts = ["deleteplanet.js","filterplanets.js","searchplanets.js"];
+        var mysql = req.app.get('mysql');
+        getPlanetByRealm(req,res, mysql, context, complete);
+        getRealms(res, mysql, context, complete);
+        function complete(){
+            callbackCount++;
+            if(callbackCount >= 2){
+                res.render('planets', context);
+            }
+
+        }
     });
 
 
