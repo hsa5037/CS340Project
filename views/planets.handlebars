@@ -3,12 +3,80 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Marvel Planets</title>
+	<style type="text/css">
+		body {
+		  background-color: #401515;
+		  color: white;
+		  font-family: arial;
+		  background-image: url("https://i.imgur.com/V3mfvJy.png");
+		  background-repeat: repeat;
+		}
+		table, th, td {
+		  border: 1px solid #af0000;
+		  border-radius: 5px;
+		  padding: 2px;
+		  vertical-align: center;
+		}
+		table {
+		  width: 50%;
+		  margin: auto;
+		  border-collapse: separate;
+		  border-spacing: 2;
+		  border: 2px solid #d6b200 !important;
+		}
+		th {
+		  text-align: center;
+		  border: 2px solid #d6b200 !important;
+		}
+		td {
+		  text-align: left;
+		}
+		tr:nth-child(even) {
+		  background-color: rgba(255, 0, 0, 0.1);
+		}
+		tr:nth-child(odd) {
+		  background-color: rgba(0, 0, 0, 0.2);
+		}
+		input, select, button {
+		  border-radius: 5px;
+		  padding: 3px;
+		  margin: 5px;
+		  color: white;
+		  background-color: #000000;
+		  border: 2px solid #af0000;
+		}
+		.area {
+		  border-radius: 5px;
+		  padding: 2px;
+		  margin: 5px;
+		  color: white;
+		  background-color: rgba(0, 0, 0, 0.1);
+		  border: 2px solid #af0000;
+		}
+		a:link {
+		  color: white;
+		  text-decoration: none;
+		  font-weight: bold;
+		}
+		a:visited {
+		  color: white;
+		  text-decoration: none;
+		}
+		a:hover {
+		  color: red;
+		  text-decoration: none;
+		}
+		a:active {
+		  color: yellow;
+		  text-decoration: none;
+		}
+	</style>
 	</head>
 
 	<body>
 
 		<h3>Add new planet:</h3>
-		<form id="addplanet" action="/planets" method="post">
+		<form id="addplanet" action="/planets" method="post" class="area">
 			Name: <input type="text" name="name"><br>
 		    Realm: <select name="realm">
 		    	<option value="none">None</option>
@@ -23,7 +91,7 @@
 		<!-- SEARCH & FILTER OPTIONS IN PROGRESS -->
 
 		<h3>Search and filter:</h3>
-		<form id='filter_planets' action='' method=''>
+		<form id='filter_planets' action='' method='' class="area">
 		<!--- this form does not submit directly, the button handles all the interaction with backend -->
 		    <label> Filter by realm: </label>
 		    <select id='realm_filter' name="realm">
@@ -34,7 +102,7 @@
 		    <input type="button" value="Filter" onclick="filterPlanetByRealm()"><br><br>
 		</form>
 
-		<form id='search_planet' action='' method=''>
+		<form id='search_planet' action='' method='' class="area">
 		<!--- this form does not submit directly, the button handles all the interaction with backend -->
 		    <label> Search planets for name starting with:</label>
 		    <input id='name_search_string' type='text' name='name_search_string' value=''>

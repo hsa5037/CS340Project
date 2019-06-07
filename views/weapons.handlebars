@@ -3,12 +3,80 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Marvel Weapons</title>
+	<style type="text/css">
+		body {
+		  background-color: #401515;
+		  color: white;
+		  font-family: arial;
+		  background-image: url("https://i.imgur.com/V3mfvJy.png");
+		  background-repeat: repeat;
+		}
+		table, th, td {
+		  border: 1px solid #af0000;
+		  border-radius: 5px;
+		  padding: 2px;
+		  vertical-align: center;
+		}
+		table {
+		  width: 50%;
+		  margin: auto;
+		  border-collapse: separate;
+		  border-spacing: 2;
+		  border: 2px solid #d6b200 !important;
+		}
+		th {
+		  text-align: center;
+		  border: 2px solid #d6b200 !important;
+		}
+		td {
+		  text-align: left;
+		}
+		tr:nth-child(even) {
+		  background-color: rgba(255, 0, 0, 0.1);
+		}
+		tr:nth-child(odd) {
+		  background-color: rgba(0, 0, 0, 0.2);
+		}
+		input, select, button {
+		  border-radius: 5px;
+		  padding: 3px;
+		  margin: 5px;
+		  color: white;
+		  background-color: #000000;
+		  border: 2px solid #af0000;
+		}
+		.area {
+		  border-radius: 5px;
+		  padding: 2px;
+		  margin: 5px;
+		  color: white;
+		  background-color: rgba(0, 0, 0, 0.1);
+		  border: 2px solid #af0000;
+		}
+		a:link {
+		  color: white;
+		  text-decoration: none;
+		  font-weight: bold;
+		}
+		a:visited {
+		  color: white;
+		  text-decoration: none;
+		}
+		a:hover {
+		  color: red;
+		  text-decoration: none;
+		}
+		a:active {
+		  color: yellow;
+		  text-decoration: none;
+		}
+	</style>
 	</head>
 
 	<body>
 
 		<h3>Add new weapon:</h3>
-		<form id="addweapon" action="/weapons" method="post">
+		<form id="addweapon" action="/weapons" method="post" class="area">
 			Name: <input type="text" name="name"><br>
 			Description: <input type="text" name="description"><br>
 		    Wielder: <select name="wielder">
@@ -24,7 +92,7 @@
 		<!-- SEARCH & FILTER OPTIONS IN PROGRESS -->
 
 		<h3>Search and filter:</h3>
-		<form id='filter_weapon' action='' method=''>
+		<form id='filter_weapon' action='' method='' class="area">
 		<!--- this form does not submit directly, the button handles all the interaction with backend -->
 		    <label> Filter by character: </label>
 		    <select id='weapon_filter' name="weapon">
