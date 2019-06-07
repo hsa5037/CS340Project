@@ -26,6 +26,22 @@ module.exports = function(){
     	});
     }
 
+    //filter weapons by wielder
+
+    function getWeaponByChar(req, res, mysql, context, complete){
+      var query = "SELECT W.id as id, W.name as name, W.description as description, C.name as wielder FROM weapons W LEFT JOIN characters C ON C.id=W.wielder WHERE C.id = ?";
+      console.log(req.params)
+      var inserts = [req.params.character]
+      mysql.pool.query(query, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.weapon = results;
+            complete();
+        });
+    }
+
     /*To get ID for a weapon*/
     function getOneWeapon(res, mysql, context, id, complete){
         var sql = "SELECT W.id as id, W.name as name, W.description as description, C.name as wielder FROM weapons W LEFT JOIN characters C ON C.id=W.wielder WHERE W.id = ?";
@@ -44,7 +60,7 @@ module.exports = function(){
     router.get('/', function(req, res){
     	var callbackCount = 0;
     	var context = {};
-        context.jsscripts = ["deleteweapons.js","searchchar.js"];
+        context.jsscripts = ["deleteweapons.js","searchchar.js", "filterweapons.js"];
     	var mysql = req.app.get('mysql');
     	getChars(res, mysql, context, complete);
         getWeapons(res, mysql, context, complete);
@@ -54,6 +70,23 @@ module.exports = function(){
     			res.render('weapons', context);
     		}
     	}
+    });
+
+
+    router.get('/filter/:character', function(req, res){
+        var callbackCount = 0;
+        var context = {};
+        context.jsscripts = ["deleteweapons.js","searchchar.js", "filterweapons.js"];
+        var mysql = req.app.get('mysql');
+        getWeaponByChar(req,res, mysql, context, complete);
+        getChars(res, mysql, context, complete);
+        function complete(){
+            callbackCount++;
+            if(callbackCount >= 2){
+                res.render('weapons', context);
+            }
+
+        }
     });
 
 
