@@ -4,3 +4,5 @@ function filterCharByPlanet() {
     //construct the URL and redirect to it
     window.location = '/characters/filter/' + parseInt(planet_id)
 }
+
+
