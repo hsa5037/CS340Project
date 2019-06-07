@@ -26,6 +26,21 @@ module.exports = function(){
         });
     }
 
+    //For filtering powers by char
+    function getPowerByCharacter(req, res, mysql, context, complete){
+      var query = "SELECT P.name as name, C.name as charName FROM powers P INNER JOIN characters_powers CP ON CP.pid=P.id INNER JOIN characters C ON C.id=CP.cid WHERE C.id = ?";
+      console.log(req.params)
+      var inserts = [req.params.character]
+      mysql.pool.query(query, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.powerChar = results;
+            complete();
+        });
+    }
+
     /*For getting powers with characters attached*/
     function getPowerChar(res, mysql, context, complete){
         mysql.pool.query("SELECT P.name as name, C.name as charName FROM powers P INNER JOIN characters_powers CP ON CP.pid=P.id INNER JOIN characters C ON C.id=CP.cid ORDER BY P.name ASC", function(error, results, fields){
@@ -56,7 +71,7 @@ module.exports = function(){
     router.get('/', function(req, res){
     	var callbackCount = 0;
     	var context = {};
-        context.jsscripts = ["deletepowers.js","searchchar.js"];
+        context.jsscripts = ["deletepowers.js","searchchar.js", "filterpowers.js"];
     	var mysql = req.app.get('mysql');
     	getPowers(res, mysql, context, complete);
         getChars(res, mysql, context, complete);
@@ -67,6 +82,22 @@ module.exports = function(){
     			res.render('powers', context);
     		}
     	}
+    });
+
+    router.get('/filter/:character', function(req, res){
+        var callbackCount = 0;
+        var context = {};
+        context.jsscripts = ["deletepowers.js","searchchar.js", "filterpowers.js"];
+        var mysql = req.app.get('mysql');
+        getPowerByCharacter(req,res, mysql, context, complete);
+        getChars(res, mysql, context, complete);
+        function complete(){
+            callbackCount++;
+            if(callbackCount >= 2){
+                res.render('powers', context);
+            }
+
+        }
     });
 
 

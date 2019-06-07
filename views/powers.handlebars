@@ -33,16 +33,6 @@
 		<!-- SEARCH & FILTER OPTIONS IN PROGRESS -->
 
 		<h3>Search and filter:</h3>
-		<form id='filter_powers' action='' method=''>
-		<!--- this form does not submit directly, the button handles all the interaction with backend -->
-		    <label> Filter by power: </label>
-		    <select id='power_filter' name="power">
-		        {{#each power}}
-		        <option value="{{id}}">{{name}}</option>
-		        {{/each}}
-		    </select><br>
-		    <input type="button" value="Filter" onclick="filterByPower()"><br><br>
-		</form>
 
 		<form id='filter_character' action='' method=''>
 		<!--- this form does not submit directly, the button handles all the interaction with backend -->
