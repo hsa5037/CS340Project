@@ -106,6 +106,13 @@
 		    <input type="button" value="Filter" onclick="filterWeaponsByChar()"><br><br>
 		</form>
 
+		<form id='search_weapons' action='' method='' class="area">
+		<!--- this form does not submit directly, the button handles all the interaction with backend -->
+		    <label> Search weapons for name starting with:</label>
+		    <input id='name_search_string' type='text' name='name_search_string' value=''>
+		    <input type="button" value="Search" onclick="searchWeaponsByName()">
+		</form>
+
 
 		<h2>Current weapons list:</h2>
 		<table>
