@@ -26,7 +26,7 @@ module.exports = function(){
     	});
     }
 
-    //Filter Planets by realm
+    /*Filter planets by realm*/
     function getPlanetByRealm(req, res, mysql, context, complete){
       var query = "SELECT P.id as id, P.name as name, R.name as realm FROM planets P INNER JOIN realms R ON R.id = P.realm WHERE R.id = ?;";
       console.log(req.params)
@@ -71,6 +71,7 @@ module.exports = function(){
     	}
     });
 
+    /*Display filtered planets*/
     router.get('/filter/:realm', function(req, res){
         var callbackCount = 0;
         var context = {};
@@ -134,7 +135,7 @@ module.exports = function(){
         var mysql = req.app.get('mysql');
         console.log(req.body)
         console.log(req.params.id)
-        var sql = "UPDATE planets SET name=?, realm=? WHERE id=?";
+        var sql = "UPDATE planets SET name=?, realm=NULLIF(?, 'none') WHERE id=?";
         var inserts = [req.body.name, req.body.realm, req.params.id];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
@@ -148,6 +149,7 @@ module.exports = function(){
         });
     });
 
+    /*Deletes a planet*/
     router.delete('/:id', function(req, res){
         var mysql = req.app.get('mysql');
         var sql = "DELETE FROM planets WHERE id = ?";

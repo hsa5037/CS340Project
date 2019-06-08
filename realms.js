@@ -97,6 +97,7 @@ module.exports = function(){
         });
     });
 
+    /*Delete a realm*/
     router.delete('/:id', function(req, res){
         var mysql = req.app.get('mysql');
         var sql = "DELETE FROM realms WHERE id = ?";

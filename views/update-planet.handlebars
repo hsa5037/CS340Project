@@ -44,8 +44,9 @@
 
 <h1>Update {{selectPlanet.name}}:</h1>
 <form id="update-planet" action="/planets" method="post">
-    Name: <input type="text" name="name" value="{{selectPlanet.name}}"><br>
+    Name: <input type="text" name="name" value="{{selectPlanet.name}}" required><br>
     Realm: <select name="realm" id="realm-selector"> 
+        <option value="none">None</option>
         {{#each realm}}
         <option value="{{id}}">{{name}}</option>
         {{/each}}

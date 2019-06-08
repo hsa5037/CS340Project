@@ -16,7 +16,7 @@ module.exports = function(){
 
     /*For getting all weapons*/
     function getWeapons(res, mysql, context, complete){
-    	mysql.pool.query("SELECT W.id as id, W.name as name, W.description as description, C.name as wielder FROM weapons W LEFT JOIN characters C ON C.id=W.wielder", function(error, results, fields){
+    	mysql.pool.query("SELECT W.id as id, W.name as name, W.description as description, C.name as wielder FROM weapons W LEFT JOIN characters C ON C.id=W.wielder ORDER BY W.name ASC", function(error, results, fields){
     		if(error){
     			res.write(JSON.stringify(error));
     			res.end();
@@ -26,8 +26,7 @@ module.exports = function(){
     	});
     }
 
-    //filter weapons by wielder
-
+    /*Filter weapons by wielder*/
     function getWeaponByChar(req, res, mysql, context, complete){
       var query = "SELECT W.id as id, W.name as name, W.description as description, C.name as wielder FROM weapons W LEFT JOIN characters C ON C.id=W.wielder WHERE C.id = ?";
       console.log(req.params)
@@ -72,7 +71,7 @@ module.exports = function(){
     	}
     });
 
-
+    /*Displays filtered by wielder*/
     router.get('/filter/:character', function(req, res){
         var callbackCount = 0;
         var context = {};
@@ -151,6 +150,7 @@ module.exports = function(){
         });
     });
 
+    /*Deletes a weapon*/
     router.delete('/:id', function(req, res){
         var mysql = req.app.get('mysql');
         var sql = "DELETE FROM weapons WHERE id = ?";

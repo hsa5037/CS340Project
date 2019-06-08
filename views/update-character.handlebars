@@ -44,7 +44,7 @@
 
 <h1>Update {{selectChar.name}}:</h1>
 <form id="update-character" action="/characters" method="post">
-    Name: <input type="text" name="name" value="{{selectChar.name}}"><br>
+    Name: <input type="text" name="name" value="{{selectChar.name}}" required><br>
     Homeworld: <select name="homeplanet" id="planet-selector"> 
 		<option value="none">None</option>
         {{#each planets}}

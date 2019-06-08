@@ -44,7 +44,7 @@
 
 <h1>Update {{selectWeapon.name}}:</h1>
 <form id="update-weapon" action="/weapons" method="post">
-    Name: <input type="text" name="name" value="{{selectWeapon.name}}"><br>
+    Name: <input type="text" name="name" value="{{selectWeapon.name}}" required><br>
     Description: <input type="text" name="description" value="{{selectWeapon.description}}"><br>
     Wielder: <select name="wielder" id="character-selector"> 
 		<option value="none">None</option>

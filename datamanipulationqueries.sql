@@ -1,116 +1,103 @@
 /*INSERT individual entry*/
-INSERT INTO realms (name)
-VALUES (?);
+INSERT INTO characters (name, homeplanet, alignment) 
+VALUES (?, NULLIF(?,'none'), ?);
 
-INSERT INTO planets (name, realm)
-VALUES (?, ?);
+INSERT INTO planets (name, realm) 
+VALUES (?,?);
 
 INSERT INTO alignment (alignment)
 VALUES (?);
 
-INSERT INTO characters (name, homeplanet, alignment)
-VALUES (?, ?, ?);
+INSERT INTO weapons (name, description, wielder) 
+VALUES (?,?,?);
 
-INSERT INTO weapons (name, description, wielder)
-VALUES (?, ?, ?);
+INSERT INTO powers (name, description) 
+VALUES (?,?);
 
-INSERT INTO powers (name, description)
-VALUES (?, ?);
+INSERT INTO characters_powers (cid, pid) 
+VALUES (?,?)
 
-INSERT INTO characters_powers (cid, pid)
-VALUES (?, ?);
 
 
 /*SELECT to display content or filter options*/
-/*Show characters with planet, weapons, alignment and powers attached*/
-SELECT C.name, H.name, P.name, A.alignment FROM characters C
-INNER JOIN characters_powers CP ON CP.cid = C.id
-INNER JOIN powers P ON P.id = CP.pid
-INNER JOIN planets H ON H.id = C.homeplanet
-INNER JOIN alignment A ON A.id = C.alignment
+/*Get characters*/
+SELECT C.id as id, C.name as name, H.name as planet, A.alignment as alignment FROM characters C 
+LEFT JOIN planets H ON H.id = C.homeplanet 
+LEFT JOIN alignment A ON A.id = C.alignment 
 ORDER BY C.name ASC;
 
-/*Show planets with realm attached*/
-SELECT P.name, R.name FROM planets P
-INNER JOIN realms R ON R.id = P.realm
+/*Get powers*/
+SELECT P.id as pid, P.name as name, P.description as description, COUNT(C.name) as numChars FROM powers P 
+LEFT JOIN characters_powers CP ON CP.pid=P.id 
+LEFT JOIN characters C ON C.id=CP.pid 
+GROUP BY P.name ASC;
+
+/*Get characters-powers*/
+SELECT P.id as pid, P.name as name, C.id as cid, C.name as charName FROM powers P 
+INNER JOIN characters_powers CP ON CP.pid=P.id 
+INNER JOIN characters C ON C.id=CP.cid 
 ORDER BY P.name ASC;
 
-/*List powers*/
-SELECT name, description FROM powers
-ORDER BY name ASC;
+/*Get weapons*/
+SELECT W.id as id, W.name as name, W.description as description, C.name as wielder FROM weapons W 
+LEFT JOIN characters C ON C.id=W.wielder
+ORDER BY W.name ASC;
 
-/*List weapons*/
-SELECT name, description FROM weapons
-ORDER BY name ASC;
+/*Get planets*/
+SELECT P.id, P.name as name, R.name as realm FROM planets P 
+LEFT JOIN realms R ON P.realm=R.id 
+ORDER BY P.name ASC;
 
-/*List realms*/
-SELECT name FROM realms
-ORDER BY name ASC;
+/*Get realms*/
+SELECT R.id as id, R.name, COUNT(P.name) as planet_count FROM realms R 
+LEFT JOIN planets P ON P.realm=R.id 
+GROUP BY R.name ASC
 
 
-/*DELETE one entity*/
+
+/*DELETE queries*/
 /*Delete character by name*/
-DELETE FROM characters
-WHERE name='?';
+DELETE FROM characters 
+WHERE id = ?;
 
 /*Delete planet by name*/
-DELETE FROM planets
-WHERE name='?';
+DELETE FROM planets 
+WHERE id = ?;
 
 /*Delete realm by name*/
-DELETE FROM realms
-WHERE name='?';
+DELETE FROM realms 
+WHERE id = ?;
 
 /*Delete weapon by name*/
-DELETE FROM weapons
-WHERE name='?';
+DELETE FROM weapons 
+WHERE id = ?;
 
 /*Delete power by name*/
-DELETE FROM powers
-WHERE name='?';
+DELETE FROM powers WHERE id = ?;
 
-/*UPDATE one entity*/
-/*Updates character name*/
-UPDATE characters
-SET name='?'
-WHERE id='?';
+/*Delete character-power*/
+DELETE FROM characters_powers 
+WHERE cid = ? AND pid = ?;
 
-/*Update character info by name*/
-UPDATE characters
-SET homeplanet='?', alignment='?'
-WHERE name='?';
 
-/*Must be able to add and remove from on many-to-many relationship and add to all relationships.*/
-/*INSERT into all relationships*/
-SELECT C.id INTO @cid FROM characters C WHERE C.name = '?';
-SELECT P.id INTO @pid FROM powers P WHERE P.name = '?';
-INSERT INTO powers (cid, pid) VALUES (@cid, @pid);
 
-/*DELETE one many-to-many*/
-DELETE FROM characters
-WHERE id in (
-SELECT id FROM characters c
-INNER JOIN characters_powers cp ON c.id =cp.cid
-INNER JOIN powers p ON p.id= cp.pid WHERE p.id = (?)
-);
+/*UPDATE queries*/
+/*Updates character, includes Null option for planet*/
+UPDATE characters SET name=?, homeplanet=NULLIF(?,'none'), alignment=? 
+WHERE id=?;
 
-DELETE FROM powers WHERE id = (?);
+/*Updates planet, includes Null option for realm*/
+UPDATE planets SET name=?, realm=NULLIF(?, 'none') 
+WHERE id=?;
 
-/*In one 1-to-many relationship, set foreign key to NULL*/
-/*Sets character's homeworld to NULL by name*/
-UPDATE characters
-SET homeplanet=NULL
-WHERE name='?';
+/*Updates weapon, includes Null option for wielder*/
+UPDATE weapons SET name=?, description=?, wielder=NULLIF(?, 'none')
+WHERE id=?;
 
-/*In many-to-many, delete a row from the join table*/
-DELETE FROM characters
-WHERE id IN (
-SELECT id FROM characters c
-INNER JOIN characters_powers cp ON c.id =cp.cid
-INNER JOIN powers p ON p.id= cp.pid WHERE p.id = '?'
-);
+/*Updates realm*/
+UPDATE realms SET name=? 
+WHERE id=?;
 
-DELETE FROM powers WHERE id = '?';
-DELETE characters,powers FROM characters
-INNER JOIN powers ON powers.ref = characters.id 
-WHERE characters.id = '?';
+/*Updates power*/
+UPDATE powers SET name=?, description=? 
+WHERE id=?;

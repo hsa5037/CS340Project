@@ -26,7 +26,7 @@ module.exports = function(){
         });
     }
 
-    //For filtering powers by char
+    /*For filtering powers by character*/
     function getPowerByCharacter(req, res, mysql, context, complete){
       var query = "SELECT P.id as pid, P.name as name, C.id as cid, C.name as charName FROM powers P INNER JOIN characters_powers CP ON CP.pid=P.id INNER JOIN characters C ON C.id=CP.cid WHERE C.id = ?";
       console.log(req.params)
@@ -155,6 +155,7 @@ module.exports = function(){
         });
     });
 
+    /*Deletes a power*/
     router.delete('/:id', function(req, res){
         var mysql = req.app.get('mysql');
         var sql = "DELETE FROM powers WHERE id = ?";
