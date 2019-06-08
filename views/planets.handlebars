@@ -70,6 +70,9 @@
 		  color: yellow;
 		  text-decoration: none;
 		}
+		.button {
+		  width: 50px !important;
+		}
 	</style>
 	</head>
 
@@ -121,10 +124,12 @@
 				<tr>
 					<td>{{name}}</td>
 					<td>{{realm}}</td>
-					<td><button onclick="deletePlanet({{id}})">Delete</button></td>
-					<td><a href="/planets/{{id}}">Update</a></td>
+					<td class="button"><button onclick="deletePlanet({{id}})">Delete</button></td>
+					<td class="button"><input type="button" onclick="location.href='/planets/{{id}}';" value="Update" /></td>
 				</tr>
-				{{/each}}
+		        {{else}}
+		        <b> No planets matching specific search. </b>
+		        {{/each}} 
 			</tbody>
 		</table>
 

@@ -70,6 +70,12 @@
 		  color: yellow;
 		  text-decoration: none;
 		}
+		.charpow {
+		  width: 25%;
+		}
+		.button {
+		  width: 50px !important;
+		}
 	</style>
 	</head>
 
@@ -82,20 +88,21 @@
 			<input type="submit" value="Submit">
 		</form><br />
 
-		<h3>Edit a power on a character:</h3>
-		<form class="area">
-			Power: <select name="power">
-		        {{#each power}}
-		        <option value="{{id}}">{{name}}</option>
+		<h3>Add power(s) to a character:</h3>
+		<form id="add_power_char" action="/powers/connect" method="post" class="area">
+			Character: <select name="cid">
+		        {{#each character}}
+		        <option value="{{cid}}">{{name}}</option>
 		        {{/each}}
 		    </select><br>
-			Character: <select name="character">
-		        {{#each character}}
-		        <option value="{{id}}">{{name}}</option>
+			Powers: <select multiple name="pows">
+		        {{#each power}}
+		        <option value="{{pid}}">{{name}}</option>
+		        {{else}}
+		        <option value="" disabled>None available</option>
 		        {{/each}}
 		    </select><br>
 			<input type="submit" value="Add">
-			<input type="submit" value="Remove">
 		</form><br />
 
 		<!-- SEARCH & FILTER OPTIONS IN PROGRESS -->
@@ -107,7 +114,7 @@
 		    <label> Filter by character: </label>
 		    <select id='character_filter' name="character">
 		        {{#each character}}
-		        <option value="{{id}}">{{name}}</option>
+		        <option value="{{cid}}">{{name}}</option>
 		        {{/each}}
 		    </select><br>
 		    <input type="button" value="Filter" onclick="filterPowerByChar()"><br><br>
@@ -127,15 +134,17 @@
 					<td>{{name}}</td>
 					<td>{{description}}</td>
 					<td>{{numChars}}</td>
-					<td><button onclick="deletePower({{id}})">Delete</button></td>
-					<td><a href="/powers/{{id}}">Update</a></td>
+					<td class="button"><button onclick="deletePower({{pid}})">Delete</button></td>
+					<td class="button"><input type="button" onclick="location.href='/powers/{{pid}}';" value="Update" /></td>
 				</tr>
-				{{/each}}
+		        {{else}}
+		        <b> No powers matching specific search. </b>
+		        {{/each}} 
 			</tbody>
 		</table>
 
 		<h2>Current character/power list:</h2>
-		<table>
+		<table class="charpow">
 			<thead>
 				<th>Power</th>
 				<th>Character</th>
@@ -145,8 +154,11 @@
 				<tr>
 					<td>{{name}}</td>
 					<td>{{charName}}</td>
+					<td class="button"><button onclick="deleteCharPow({{pid}}, {{cid}})">Remove</button></td>
 				</tr>
-				{{/each}}
+		        {{else}}
+		        <b> No powers matching specific search. </b>
+		        {{/each}} 
 			</tbody>
 		</table>
 

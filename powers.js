@@ -4,7 +4,7 @@ module.exports = function(){
 
     /*For getting power list*/
     function getPowers(res, mysql, context, complete){
-        mysql.pool.query("SELECT P.id as id, P.name as name, P.description as description, COUNT(C.name) as numChars FROM powers P LEFT JOIN characters_powers CP ON CP.pid=P.id LEFT JOIN characters C ON C.id=CP.pid GROUP BY P.name ASC", function(error, results, fields){
+        mysql.pool.query("SELECT P.id as pid, P.name as name, P.description as description, COUNT(C.name) as numChars FROM powers P LEFT JOIN characters_powers CP ON CP.pid=P.id LEFT JOIN characters C ON C.id=CP.pid GROUP BY P.name ASC", function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
@@ -16,7 +16,7 @@ module.exports = function(){
 
     /*For populating character selection list*/
     function getChars(res, mysql, context, complete){
-        mysql.pool.query("SELECT id, name as name FROM characters", function(error, results, fields){
+        mysql.pool.query("SELECT id as cid, name as name FROM characters", function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
@@ -28,7 +28,7 @@ module.exports = function(){
 
     //For filtering powers by char
     function getPowerByCharacter(req, res, mysql, context, complete){
-      var query = "SELECT P.id as id, P.name as name, C.name as charName FROM powers P INNER JOIN characters_powers CP ON CP.pid=P.id INNER JOIN characters C ON C.id=CP.cid WHERE C.id = ?";
+      var query = "SELECT P.id as pid, P.name as name, C.name as charName FROM powers P INNER JOIN characters_powers CP ON CP.pid=P.id INNER JOIN characters C ON C.id=CP.cid WHERE C.id = ?";
       console.log(req.params)
       var inserts = [req.params.character]
       mysql.pool.query(query, inserts, function(error, results, fields){
@@ -43,7 +43,7 @@ module.exports = function(){
 
     /*For getting powers with characters attached*/
     function getPowerChar(res, mysql, context, complete){
-        mysql.pool.query("SELECT P.name as name, C.name as charName FROM powers P INNER JOIN characters_powers CP ON CP.pid=P.id INNER JOIN characters C ON C.id=CP.cid ORDER BY P.name ASC", function(error, results, fields){
+        mysql.pool.query("SELECT P.id as pid, P.name as name, C.id as cid, C.name as charName FROM powers P INNER JOIN characters_powers CP ON CP.pid=P.id INNER JOIN characters C ON C.id=CP.cid ORDER BY P.name ASC", function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
@@ -168,6 +168,31 @@ module.exports = function(){
                 res.status(202).end();
             }
         })
+    });
+
+    /*Associate power with a character*/
+    router.post('/connect', function(req, res){
+        console.log("We get the multi-select power dropdown as ", req.body.pows)
+        var mysql = req.app.get('mysql');
+        // let's get out the powers from the array that was submitted by the form 
+        var powers = req.body.pows
+        var thisChar = req.body.cid
+        for (let pow of powers) {
+          console.log("Processing power id " + pow)
+          var sql = "INSERT INTO characters_powers (cid, pid) VALUES (?,?)";
+          var inserts = [thisChar, pow];
+          sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                //TODO: send error messages to frontend as the following doesn't work
+                /* 
+                res.write(JSON.stringify(error));
+                res.end();
+                */
+                console.log(error)
+            }
+          });
+        } //for loop ends here 
+        res.redirect('/powers');
     });
 
 
