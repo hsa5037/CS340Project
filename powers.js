@@ -28,7 +28,7 @@ module.exports = function(){
 
     //For filtering powers by char
     function getPowerByCharacter(req, res, mysql, context, complete){
-      var query = "SELECT P.id as pid, P.name as name, C.name as charName FROM powers P INNER JOIN characters_powers CP ON CP.pid=P.id INNER JOIN characters C ON C.id=CP.cid WHERE C.id = ?";
+      var query = "SELECT P.id as pid, P.name as name, C.id as cid, C.name as charName FROM powers P INNER JOIN characters_powers CP ON CP.pid=P.id INNER JOIN characters C ON C.id=CP.cid WHERE C.id = ?";
       console.log(req.params)
       var inserts = [req.params.character]
       mysql.pool.query(query, inserts, function(error, results, fields){
@@ -71,7 +71,7 @@ module.exports = function(){
     router.get('/', function(req, res){
     	var callbackCount = 0;
     	var context = {};
-        context.jsscripts = ["deletepowers.js","searchchar.js", "filterpowers.js"];
+        context.jsscripts = ["deletechar.js", "deletepowers.js","searchchar.js", "filterpowers.js"];
     	var mysql = req.app.get('mysql');
     	getPowers(res, mysql, context, complete);
         getChars(res, mysql, context, complete);
@@ -84,10 +84,11 @@ module.exports = function(){
     	}
     });
 
+    /*Displays power by character filter*/
     router.get('/filter/:character', function(req, res){
         var callbackCount = 0;
         var context = {};
-        context.jsscripts = ["deletepowers.js","searchchar.js", "filterpowers.js"];
+        context.jsscripts = ["deletechar.js", "deletepowers.js","searchchar.js", "filterpowers.js"];
         var mysql = req.app.get('mysql');
         getPowerByCharacter(req,res, mysql, context, complete);
         getChars(res, mysql, context, complete);
@@ -194,6 +195,28 @@ module.exports = function(){
         } //for loop ends here 
         res.redirect('/powers');
     });
+
+    /* Delete a character/power relationship */
+    /* This route will accept a HTTP DELETE request in the form
+     * /cid/{{cid}}/pow/{{pid}} -- which is sent by the AJAX form 
+     */
+    router.delete('/cid/:cid/pow/:pid', function(req, res){
+        //console.log(req) //I used this to figure out where did cid and pid go in the request
+        console.log(req.params.cid)
+        console.log(req.params.pid)
+        var mysql = req.app.get('mysql');
+        var sql = "DELETE FROM characters_powers WHERE cid = ? AND pid = ?";
+        var inserts = [req.params.cid, req.params.pid];
+        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.status(400); 
+                res.end(); 
+            }else{
+                res.status(202).end();
+            }
+        })
+    })
 
 
     return router;

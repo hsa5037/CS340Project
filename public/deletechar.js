@@ -8,10 +8,10 @@ function deleteChar(id){
     })
 };
 
-/*
-function deletePeopleCert(pid, cid){
+
+function deleteCharPow(pid, cid){
   $.ajax({
-      url: '/people_certs/pid/' + pid + '/cert/' + cid,
+      url: '/powers/cid/' + cid + '/pow/' + pid,
       type: 'DELETE',
       success: function(result){
           if(result.responseText != undefined){
@@ -23,4 +23,3 @@ function deletePeopleCert(pid, cid){
       }
   })
 };
-*/
