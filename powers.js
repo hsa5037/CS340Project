@@ -28,7 +28,7 @@ module.exports = function(){
 
     //For filtering powers by char
     function getPowerByCharacter(req, res, mysql, context, complete){
-      var query = "SELECT P.name as name, C.name as charName FROM powers P INNER JOIN characters_powers CP ON CP.pid=P.id INNER JOIN characters C ON C.id=CP.cid WHERE C.id = ?";
+      var query = "SELECT P.id as id, P.name as name, C.name as charName FROM powers P INNER JOIN characters_powers CP ON CP.pid=P.id INNER JOIN characters C ON C.id=CP.cid WHERE C.id = ?";
       console.log(req.params)
       var inserts = [req.params.character]
       mysql.pool.query(query, inserts, function(error, results, fields){

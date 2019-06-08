@@ -28,7 +28,7 @@ module.exports = function(){
 
     //Filter Planets by realm
     function getPlanetByRealm(req, res, mysql, context, complete){
-      var query = "SELECT P.name as name, R.name as realm FROM planets P INNER JOIN realms R ON R.id = P.realm WHERE R.id = ?;";
+      var query = "SELECT P.id as id, P.name as name, R.name as realm FROM planets P INNER JOIN realms R ON R.id = P.realm WHERE R.id = ?;";
       console.log(req.params)
       var inserts = [req.params.realm]
       mysql.pool.query(query, inserts, function(error, results, fields){

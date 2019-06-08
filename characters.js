@@ -40,7 +40,7 @@ module.exports = function(){
 
     /*For filtering by planet*/
     function getCharByPlanet(req, res, mysql, context, complete){
-      var query = "SELECT C.name as name, P.name as planet, A.alignment as alignment FROM characters C INNER JOIN planets P ON P.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment WHERE P.id = ?;";
+      var query = "SELECT C.id as id, C.name as name, P.name as planet, A.alignment as alignment FROM characters C INNER JOIN planets P ON P.id = C.homeplanet INNER JOIN alignment A ON A.id = C.alignment WHERE P.id = ?;";
       console.log(req.params)
       var inserts = [req.params.homeplanet]
       mysql.pool.query(query, inserts, function(error, results, fields){
@@ -84,6 +84,7 @@ module.exports = function(){
     	}
     });
 
+    /*Displays character filter by planet*/
     router.get('/filter/:homeplanet', function(req, res){
         var callbackCount = 0;
         var context = {};
@@ -144,7 +145,7 @@ module.exports = function(){
         var mysql = req.app.get('mysql');
         console.log(req.body)
         console.log(req.params.id)
-        var sql = "UPDATE characters SET name=?, homeplanet=?, alignment=? WHERE id=?";
+        var sql = "UPDATE characters SET name=?, homeplanet=NULLIF(?, 'none'), alignment=? WHERE id=?";
         var inserts = [req.body.name, req.body.homeplanet, req.body.alignment, req.params.id];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
@@ -158,6 +159,7 @@ module.exports = function(){
         });
     });
 
+    /*Deletes a character*/
     router.delete('/:id', function(req, res){
         var mysql = req.app.get('mysql');
         var sql = "DELETE FROM characters WHERE id = ?";
