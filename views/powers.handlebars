@@ -83,7 +83,7 @@
 
 		<h3>Add new power:</h3>
 		<form id="addpower" action="/powers" method="post" class="area">
-			Name: <input type="text" name="name"><br>
+			Name: <input type="text" name="name" required><br>
 		    Description: <input type="text" name="description"><br>
 			<input type="submit" value="Submit">
 		</form><br />
@@ -95,7 +95,7 @@
 		        <option value="{{cid}}">{{name}}</option>
 		        {{/each}}
 		    </select><br>
-			Powers: <select multiple name="pows">
+			Powers: <select multiple name="pows" required>
 		        {{#each power}}
 		        <option value="{{pid}}">{{name}}</option>
 		        {{else}}

@@ -80,7 +80,7 @@
 
 		<h3>Add new character:</h3>
 		<form id="addcharacter" action="/characters" method="post" class="area">
-		    Name: <input type="text" name="name"><br>
+		    Name: <input type="text" name="name" required><br>
 		    Home planet: <select name="homeplanet">
 		    	<option value="none">None</option>
 		        {{#each planets}}

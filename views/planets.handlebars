@@ -80,7 +80,7 @@
 
 		<h3>Add new planet:</h3>
 		<form id="addplanet" action="/planets" method="post" class="area">
-			Name: <input type="text" name="name"><br>
+			Name: <input type="text" name="name" required><br>
 		    Realm: <select name="realm">
 		    	<option value="none">None</option>
 		        {{#each realm}}
