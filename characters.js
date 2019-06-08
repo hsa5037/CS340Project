@@ -14,18 +14,6 @@ module.exports = function(){
         });
     }
 
-    /*For populating world selection list*/
-    function getPowers(res, mysql, context, complete){
-        mysql.pool.query("SELECT id, name FROM powers", function(error, results, fields){
-            if(error){
-                res.write(JSON.stringify(error));
-                res.end();
-            }
-            context.power = results;
-            complete();
-        });
-    }
-
     /*For getting all characters*/
     function getChars(res, mysql, context, complete){
     	mysql.pool.query("SELECT C.id as id, C.name as name, H.name as planet, A.alignment as alignment FROM characters C LEFT JOIN planets H ON H.id = C.homeplanet LEFT JOIN alignment A ON A.id = C.alignment ORDER BY C.name ASC", function(error, results, fields){
@@ -74,11 +62,10 @@ module.exports = function(){
         context.jsscripts = ["deletechar.js","filterchar.js","searchchar.js"];
     	var mysql = req.app.get('mysql');
     	getChars(res, mysql, context, complete);
-        getPowers(res, mysql, context, complete);
         getPlanets(res, mysql, context, complete);
     	function complete(){
     		callbackCount++;
-    		if(callbackCount >= 3){
+    		if(callbackCount >= 2){
     			res.render('characters', context);
     		}
     	}
@@ -120,8 +107,6 @@ module.exports = function(){
     });
 
 
-
-
     /*Adds a character*/
     router.post('/', function(req, res){
         console.log(req.body.homeplanet)
@@ -145,7 +130,7 @@ module.exports = function(){
         var mysql = req.app.get('mysql');
         console.log(req.body)
         console.log(req.params.id)
-        var sql = "UPDATE characters SET name=?, homeplanet=NULLIF(?, 'none'), alignment=? WHERE id=?";
+        var sql = "UPDATE characters SET name=?, homeplanet=NULLIF(?,'none'), alignment=? WHERE id=?";
         var inserts = [req.body.name, req.body.homeplanet, req.body.alignment, req.params.id];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
