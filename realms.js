@@ -48,7 +48,7 @@ module.exports = function(){
     router.get('/', function(req, res){
     	var callbackCount = 0;
     	var context = {};
-        context.jsscripts = ["deleterealm.js","searchrealms.js"];
+        context.jsscripts = ["deleterealm.js", "searchrealms.js"];
     	var mysql = req.app.get('mysql');
     	getRealms(res, mysql, context, complete);
     	function complete(){
@@ -73,7 +73,7 @@ module.exports = function(){
             }
         }
     });
-    
+
 
 
 
