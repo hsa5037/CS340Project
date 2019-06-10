@@ -63,7 +63,7 @@ module.exports = function(){
     router.get('/search/:s', function(req, res){
         var callbackCount = 0;
         var context = {};
-        context.jsscripts = ["deleterealm.js", "searchRealms.js"];
+        context.jsscripts = ["deleterealm.js", "searchrealms.js"];
         var mysql = req.app.get('mysql');
         getRealmWithNameLike(req, res, mysql, context, complete);
         //getRealms(res, mysql, context, complete);
