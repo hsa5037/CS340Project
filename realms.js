@@ -28,11 +28,27 @@ module.exports = function(){
         });
     }
 
+    //Search function for realms
+    function getRealmWithNameLike(req, res, mysql, context, complete) {
+      //sanitize the input as well as include the % character
+       var query = "SELECT R.id as id, R.name, COUNT(P.name) as planet_count FROM realms R LEFT JOIN planets P ON P.realm=R.id WHERE R.name LIKE " + mysql.pool.escape(req.params.s + '%');
+      console.log(query)
+
+      mysql.pool.query(query, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.realm = results;
+            complete();
+        });
+    }
+
     /*Main route to display all realms*/
     router.get('/', function(req, res){
     	var callbackCount = 0;
     	var context = {};
-        context.jsscripts = ["deleterealm.js","searchchar.js"];
+        context.jsscripts = ["deleterealm.js","searchchar.js", "searchRealms.js"];
     	var mysql = req.app.get('mysql');
     	getRealms(res, mysql, context, complete);
     	function complete(){
@@ -42,6 +58,24 @@ module.exports = function(){
     		}
     	}
     });
+
+
+    router.get('/search/:s', function(req, res){
+        var callbackCount = 0;
+        var context = {};
+        context.jsscripts = ["deleterealm.js","searchchar.js", "searchRealms.js"];
+        var mysql = req.app.get('mysql');
+        getRealmWithNameLike(req, res, mysql, context, complete);
+        //getRealms(res, mysql, context, complete);
+        function complete(){
+            callbackCount++;
+            if(callbackCount >= 2){
+                res.render('realms', context);
+            }
+        }
+    });
+    
+
 
 
     /*Display one realm for the specific purpose of updating*/
