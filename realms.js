@@ -48,7 +48,7 @@ module.exports = function(){
     router.get('/', function(req, res){
     	var callbackCount = 0;
     	var context = {};
-        context.jsscripts = ["deleterealm.js","searchchar.js", "searchRealms.js"];
+        context.jsscripts = ["deleterealm.js","searchrealms.js"];
     	var mysql = req.app.get('mysql');
     	getRealms(res, mysql, context, complete);
     	function complete(){
@@ -63,13 +63,12 @@ module.exports = function(){
     router.get('/search/:s', function(req, res){
         var callbackCount = 0;
         var context = {};
-        context.jsscripts = ["deleterealm.js","searchchar.js", "searchRealms.js"];
+        context.jsscripts = ["deleterealm.js", "searchrealms.js"];
         var mysql = req.app.get('mysql');
         getRealmWithNameLike(req, res, mysql, context, complete);
-        //getRealms(res, mysql, context, complete);
         function complete(){
             callbackCount++;
-            if(callbackCount >= 2){
+            if(callbackCount >= 1){
                 res.render('realms', context);
             }
         }
