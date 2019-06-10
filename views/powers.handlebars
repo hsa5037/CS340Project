@@ -88,14 +88,14 @@
 			<input type="submit" value="Submit">
 		</form><br />
 
-		<h3>Add power(s) to a character:</h3>
+		<h3>Add a power to a character:</h3>
 		<form id="add_power_char" action="/powers/connect" method="post" class="area">
 			Character: <select name="cid">
 		        {{#each character}}
 		        <option value="{{cid}}">{{name}}</option>
 		        {{/each}}
 		    </select><br>
-			Powers: <select multiple name="pows" required>
+			Powers: <select name="pow" required>
 		        {{#each power}}
 		        <option value="{{pid}}">{{name}}</option>
 		        {{else}}
@@ -118,13 +118,6 @@
 		        {{/each}}
 		    </select><br>
 		    <input type="button" value="Filter" onclick="filterPowerByChar()"><br><br>
-		</form>
-
-		<form id='search_powers' action='' method='' class="area">
-		<!--- this form does not submit directly, the button handles all the interaction with backend -->
-		    <label> Search powers for name starting with:</label>
-		    <input id='name_search_string' type='text' name='name_search_string' value=''>
-		    <input type="button" value="Search" onclick="searchPowersByName()">
 		</form>
 
 

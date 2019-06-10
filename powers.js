@@ -92,9 +92,10 @@ module.exports = function(){
         var mysql = req.app.get('mysql');
         getPowerByCharacter(req,res, mysql, context, complete);
         getChars(res, mysql, context, complete);
+        getPowers(res, mysql, context, complete);
         function complete(){
             callbackCount++;
-            if(callbackCount >= 2){
+            if(callbackCount >= 3){
                 res.render('powers', context);
             }
 
@@ -174,26 +175,21 @@ module.exports = function(){
 
     /*Associate power with a character*/
     router.post('/connect', function(req, res){
-        console.log("We get the multi-select power dropdown as ", req.body.pows)
         var mysql = req.app.get('mysql');
-        // let's get out the powers from the array that was submitted by the form 
-        var powers = req.body.pows
-        var thisChar = req.body.cid
-        for (let pow of powers) {
-          console.log("Processing power id " + pow)
-          var sql = "INSERT INTO characters_powers (cid, pid) VALUES (?,?)";
-          var inserts = [thisChar, pow];
-          sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+        console.log(req.body.cid)
+        console.log(req.body.pow)
+        var sql = "INSERT INTO characters_powers (cid, pid) VALUES (?,?)";
+        var inserts = [req.body.cid, req.body.pow];
+        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
-                //TODO: send error messages to frontend as the following doesn't work
-                /* 
+                console.log(error)
                 res.write(JSON.stringify(error));
                 res.end();
-                */
-                console.log(error)
+            }else{
+                res.status(200);
+                res.end();
             }
-          });
-        } //for loop ends here 
+        });
         res.redirect('/powers');
     });
 
